@@ -40,11 +40,19 @@ problems/               문제 생성 스크립트, 인스턴스 JSON, PNG
 exp1_classical_5x5/     실험 1 코드
   check_pado_vs_pennylane.py   PADO(절단 없음)와 PennyLane의 에너지·기울기 일치 확인 (3x3, 수 초)
   exact_only.py / safe.py      두 arm
-  report.py                    표(summary.csv)와 그림(energy_curves.png)
+  exact_only_long.py           exact-only를 SAFE 최종 AR에 닿을 때까지 연장 (최대 500 step)
+  report.py                    표(summary.csv)와 그림(energy_curves.png), 판정 기준 요약값 criteria.json.
+                               연장 실행 결과가 있으면 summary_long.csv, energy_curves_long.png도 쓴다
+exp1_sampling/          실험 1의 연장: 인스턴스 0, c = 0.1의 5개 시점(초기, exact-only 후, SAFE 사전학습 후,
+                        증류 후, fine-tuning 후)을 각각 512 shots 샘플링
+  sample_reference.ipynb       5개 시점 정의(points.json) + 노이즈 없는 샘플(PennyLane lightning.amdgpu)
+  sample_h2.ipynb              Quantinuum H2 실기기 샘플 (pytket + qnexus, 로그인·제출은 사용자가 직접)
+                               두 노트북 모두 결과를 results_on_MI300X/exp1_sampling/<케이스>/<backend>/에 저장하고,
+                               있는 backend를 모두 모아 sampling_hist.png, sampling_ar.png, summary.json을 다시 그림
 exp2_classical_3x3/     실험 2 코드 (실험 1과 같은 코드, 크기·max_weight·LWPP step만 다름) — 실험 3의 고전 기준선
   exact_only.py / safe.py      두 arm
   exact_only_long.py           exact-only를 SAFE 최종 AR에 닿을 때까지 연장 (최대 2000 step)
-  report.py                    표와 그림 (연장 실행 결과가 있으면 summary_long.csv, energy_curves_long.png도)
+  report.py                    실험 1과 같은 코드. 표와 그림, criteria.json (연장 실행 결과가 있으면 summary_long.csv, energy_curves_long.png도)
 exp3_quantum_3x3/       실험 3 코드
   prepare_start_points.py      케이스 1개(인스턴스 0, c = 0.1)의 두 QPU arm 시작점 (SAFE 쪽은 LWPP → 증류, GPU에서 실행)
   train_qpu.ipynb              QPU 학습 노트북. 기본은 fake backend(FakeNighthawk) 노이즈 시뮬레이션,
@@ -74,10 +82,16 @@ python exp1_classical_5x5/check_pado_vs_pennylane.py # PASS가 나와야 함
 # 실험 1: smoke (3x3, 수십 초, 결과는 results_on_<장치>/exp1_smoke/)
 python exp1_classical_5x5/exact_only.py problems/grid3x3_inst0_seed120490.json 2
 python exp1_classical_5x5/safe.py problems/grid3x3_inst0_seed120490.json 60 2
+python exp1_classical_5x5/exact_only_long.py problems/grid3x3_inst0_seed120490.json 50   # safe.py smoke 결과가 먼저 있어야 함
+python exp1_classical_5x5/report.py exp1_smoke
 
 # 실험 1: 본 실행 (인스턴스 0-4)
 for i in 0 1 2 3 4; do python exp1_classical_5x5/exact_only.py $i && python exp1_classical_5x5/safe.py $i; done
+for i in 0 1 2 3 4; do python exp1_classical_5x5/exact_only_long.py $i; done   # safe.py 결과가 먼저 있어야 함 (step당 약 2.4초, 최대 약 8시간)
 python exp1_classical_5x5/report.py
+
+# 실험 1 샘플링: exp1_sampling/에서 sample_reference.ipynb (노이즈 없는 샘플, 수 초)
+#               → sample_h2.ipynb (Nexus 로그인 후 직접 실행, SUBMIT = True로 제출)
 
 # 실험 2: 3x3 고전 (인스턴스 0-4, 약 2분)
 for i in 0 1 2 3 4; do python exp2_classical_3x3/exact_only.py $i && python exp2_classical_3x3/safe.py $i; done
@@ -100,13 +114,19 @@ exact step은 t = 0..20이다. t = 0은 업데이트 전 시작점, t = 20은 20
 - `tau_target_*`: exact-only가 마지막에 도달한 AR에 처음 닿는 step. SAFE가 끝내 못 닿으면 비워 두고 실패로 센다.
 - `tau099_*`: 자기 궤적 최고 AR의 99%에 처음 닿는 step (논문 정의).
 - `circuits_per_step_*` = 2·N_active + 1: parameter-shift 기울기 한 번과 에너지 한 번에 드는 회로 수. 증류된 게이트는 회로에서 빠진다.
-- `circuits_to_target_*` = τ × 스텝당 회로 수. `circuit_saving` = 1 − SAFE / exact-only.
+- `circuits_to_target_*` = τ × 스텝당 회로 수 + 1. 마지막 1은 갱신이 끝난 파라미터의 에너지를 확인하는 회로이며, 실험 3 노트북이 세는 방식과 같다. `circuit_saving` = 1 − SAFE / exact-only.
 
-연장 실행 지표 (`exp2_classical_3x3/report.py` → `summary_long.csv`). 목표는 각 (인스턴스, 초기값) 쌍에서 SAFE가 20 step 뒤 도달한 AR이다.
+연장 실행 지표 (`report.py` → `summary_long.csv`; 최대 step은 실험 1이 500, 실험 2가 2000). 목표는 각 (인스턴스, 초기값) 쌍에서 SAFE가 20 step 뒤 도달한 AR이다.
 - `steps_safe_to_target`, `steps_exact_only_to_target`: 각 arm이 목표 AR에 처음 닿은 step. exact-only가 최대 step 안에 못 닿으면 비워 둔다.
 - `steps_exact_only_to_safe_first`: exact-only가 SAFE의 시작 AR(사전학습·증류 직후)에 처음 닿은 step.
-- `circuits_*_to_target` = step × (2·N_active + 1), `circuit_saving_to_target` = 1 − SAFE / exact-only. 실기기라면 여기에 회로당 shot 수가 곱해진다.
+- `circuits_*_to_target` = step × (2·N_active + 1) + 1, `circuit_saving_to_target` = 1 − SAFE / exact-only. 실기기라면 여기에 회로당 shot 수가 곱해진다.
 - `max_dE_first_steps_vs_exact_only`: 연장 실행의 앞부분이 `exact_only.py`와 같은지 확인하는 값 (0이어야 함).
+
+판정 기준 요약값 (`report.py` → `criteria.json`). 시험합의서의 기호를 쓴다 (PADO = SAFE, std = exact-only).
+- `delta_AR20_min`, `delta_AR20_median`: ΔAR(20) = AR_SAFE(20) − AR_exact-only(20)의 최솟값과 중앙값.
+- `n_pairs_AR_PADO0_ge_AR_std20`: SAFE의 시작 AR이 exact-only의 20 step 뒤 AR 이상인 쌍의 수.
+- `D_max`: 잔존 비율 D = N_active / N의 최댓값.
+- `long`: 연장 실행이 있을 때. 도달 쌍 수 `n_reached`, 회로 절감률 `R_median`·`R_min`, exact-only가 SAFE 시작 AR에 닿는 step의 최솟값 `tau_std_A0_min`. 최대 step 안에 SAFE 시작 AR에도 못 닿은 쌍은 `n_tau_std_A0_unreached`로 세며, 그 쌍의 step 수는 최대 step 이상으로 본다.
 
 ## 저장 포맷 (실행 폴더마다)
 

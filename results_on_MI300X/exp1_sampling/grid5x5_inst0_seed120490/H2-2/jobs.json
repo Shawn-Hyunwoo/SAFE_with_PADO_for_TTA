@@ -1,0 +1,24 @@
+{
+  "device": "H2-2",
+  "shots": 512,
+  "jobs": [
+    {
+      "job_id": "dcbab38c-7545-47cd-999d-e3394a400e3c",
+      "name": "exec-exp1-sampling-20261008-013921",
+      "points": [
+        "p1_initial",
+        "p2_exact_only",
+        "p3_safe_pretrained",
+        "p4_safe_distilled",
+        "p5_safe_finetuned"
+      ],
+      "program_ids": [
+        "7f4cbce5-858f-4417-9169-e025e84263d8",
+        "1fc94e9e-768b-4bdc-9313-d97cc3efeb1b",
+        "533f802a-b025-4d10-9f42-4ff2f75ca9e6",
+        "489f596d-abf1-4997-b988-f0e3d9100ac1",
+        "6525eec7-bc0f-4d7e-be58-e5a1a078dd14"
+      ]
+    }
+  ]
+}

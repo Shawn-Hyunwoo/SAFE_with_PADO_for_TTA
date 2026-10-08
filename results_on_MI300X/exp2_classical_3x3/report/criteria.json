@@ -1,0 +1,16 @@
+{
+  "n_pairs": 25,
+  "delta_AR20_min": 0.06367677215059198,
+  "delta_AR20_median": 0.14897077080272747,
+  "n_pairs_AR_PADO0_ge_AR_std20": 25,
+  "D_max": 0.5350877192982456,
+  "long": {
+    "T_max": 2000,
+    "n_pairs": 25,
+    "n_reached": 24,
+    "R_median": 0.929519923425165,
+    "R_min": 0.8441889236591223,
+    "tau_std_A0_min": 26,
+    "n_tau_std_A0_unreached": 1
+  }
+}
