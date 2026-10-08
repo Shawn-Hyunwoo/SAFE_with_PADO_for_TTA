@@ -1,0 +1,3401 @@
+{
+  "n_qubits": 25,
+  "p_layers": 3,
+  "n_params": 366,
+  "convention": "R_P(theta) = exp(-i theta P / 2); RZZ = IsingZZ, initial state |0..0>; observable = sum J ZZ + sum h Z",
+  "gates": [
+    {
+      "gate": "H",
+      "wires": [
+        0
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        1
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        2
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        3
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        4
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        5
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        6
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        7
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        8
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        9
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        10
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        11
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        12
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        13
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        14
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        15
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        16
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        17
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        18
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        19
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        20
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        21
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        22
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        23
+      ]
+    },
+    {
+      "gate": "H",
+      "wires": [
+        24
+      ]
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        1
+      ],
+      "param": 0
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        5
+      ],
+      "param": 1
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        2
+      ],
+      "param": 2
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        6
+      ],
+      "param": 3
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        3
+      ],
+      "param": 4
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        7
+      ],
+      "param": 5
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        4
+      ],
+      "param": 6
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        8
+      ],
+      "param": 7
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        9
+      ],
+      "param": 8
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        6
+      ],
+      "param": 9
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        10
+      ],
+      "param": 10
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        7
+      ],
+      "param": 11
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        11
+      ],
+      "param": 12
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        8
+      ],
+      "param": 13
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        12
+      ],
+      "param": 14
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        9
+      ],
+      "param": 15
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        13
+      ],
+      "param": 16
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        14
+      ],
+      "param": 17
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        11
+      ],
+      "param": 18
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        15
+      ],
+      "param": 19
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        12
+      ],
+      "param": 20
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        16
+      ],
+      "param": 21
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        13
+      ],
+      "param": 22
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        17
+      ],
+      "param": 23
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        14
+      ],
+      "param": 24
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        18
+      ],
+      "param": 25
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        19
+      ],
+      "param": 26
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        16
+      ],
+      "param": 27
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        20
+      ],
+      "param": 28
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        17
+      ],
+      "param": 29
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        21
+      ],
+      "param": 30
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        18
+      ],
+      "param": 31
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        22
+      ],
+      "param": 32
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        19
+      ],
+      "param": 33
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        23
+      ],
+      "param": 34
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        24
+      ],
+      "param": 35
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        20,
+        21
+      ],
+      "param": 36
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        21,
+        22
+      ],
+      "param": 37
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        22,
+        23
+      ],
+      "param": 38
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        23,
+        24
+      ],
+      "param": 39
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        6
+      ],
+      "param": 40
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        5
+      ],
+      "param": 41
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        7
+      ],
+      "param": 42
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        6
+      ],
+      "param": 43
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        8
+      ],
+      "param": 44
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        7
+      ],
+      "param": 45
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        9
+      ],
+      "param": 46
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        8
+      ],
+      "param": 47
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        11
+      ],
+      "param": 48
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        10
+      ],
+      "param": 49
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        12
+      ],
+      "param": 50
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        11
+      ],
+      "param": 51
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        13
+      ],
+      "param": 52
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        12
+      ],
+      "param": 53
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        14
+      ],
+      "param": 54
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        13
+      ],
+      "param": 55
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        16
+      ],
+      "param": 56
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        15
+      ],
+      "param": 57
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        17
+      ],
+      "param": 58
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        16
+      ],
+      "param": 59
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        18
+      ],
+      "param": 60
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        17
+      ],
+      "param": 61
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        19
+      ],
+      "param": 62
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        18
+      ],
+      "param": 63
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        21
+      ],
+      "param": 64
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        20
+      ],
+      "param": 65
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        22
+      ],
+      "param": 66
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        21
+      ],
+      "param": 67
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        23
+      ],
+      "param": 68
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        22
+      ],
+      "param": 69
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        24
+      ],
+      "param": 70
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        23
+      ],
+      "param": 71
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        0
+      ],
+      "param": 72
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        1
+      ],
+      "param": 73
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        2
+      ],
+      "param": 74
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        3
+      ],
+      "param": 75
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        4
+      ],
+      "param": 76
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        5
+      ],
+      "param": 77
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        6
+      ],
+      "param": 78
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        7
+      ],
+      "param": 79
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        8
+      ],
+      "param": 80
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        9
+      ],
+      "param": 81
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        10
+      ],
+      "param": 82
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        11
+      ],
+      "param": 83
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        12
+      ],
+      "param": 84
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        13
+      ],
+      "param": 85
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        14
+      ],
+      "param": 86
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        15
+      ],
+      "param": 87
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        16
+      ],
+      "param": 88
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        17
+      ],
+      "param": 89
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        18
+      ],
+      "param": 90
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        19
+      ],
+      "param": 91
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        20
+      ],
+      "param": 92
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        21
+      ],
+      "param": 93
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        22
+      ],
+      "param": 94
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        23
+      ],
+      "param": 95
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        24
+      ],
+      "param": 96
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        0
+      ],
+      "param": 97
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        1
+      ],
+      "param": 98
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        2
+      ],
+      "param": 99
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        3
+      ],
+      "param": 100
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        4
+      ],
+      "param": 101
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        5
+      ],
+      "param": 102
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        6
+      ],
+      "param": 103
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        7
+      ],
+      "param": 104
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        8
+      ],
+      "param": 105
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        9
+      ],
+      "param": 106
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        10
+      ],
+      "param": 107
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        11
+      ],
+      "param": 108
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        12
+      ],
+      "param": 109
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        13
+      ],
+      "param": 110
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        14
+      ],
+      "param": 111
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        15
+      ],
+      "param": 112
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        16
+      ],
+      "param": 113
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        17
+      ],
+      "param": 114
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        18
+      ],
+      "param": 115
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        19
+      ],
+      "param": 116
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        20
+      ],
+      "param": 117
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        21
+      ],
+      "param": 118
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        22
+      ],
+      "param": 119
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        23
+      ],
+      "param": 120
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        24
+      ],
+      "param": 121
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        1
+      ],
+      "param": 122
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        5
+      ],
+      "param": 123
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        2
+      ],
+      "param": 124
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        6
+      ],
+      "param": 125
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        3
+      ],
+      "param": 126
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        7
+      ],
+      "param": 127
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        4
+      ],
+      "param": 128
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        8
+      ],
+      "param": 129
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        9
+      ],
+      "param": 130
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        6
+      ],
+      "param": 131
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        10
+      ],
+      "param": 132
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        7
+      ],
+      "param": 133
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        11
+      ],
+      "param": 134
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        8
+      ],
+      "param": 135
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        12
+      ],
+      "param": 136
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        9
+      ],
+      "param": 137
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        13
+      ],
+      "param": 138
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        14
+      ],
+      "param": 139
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        11
+      ],
+      "param": 140
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        15
+      ],
+      "param": 141
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        12
+      ],
+      "param": 142
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        16
+      ],
+      "param": 143
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        13
+      ],
+      "param": 144
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        17
+      ],
+      "param": 145
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        14
+      ],
+      "param": 146
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        18
+      ],
+      "param": 147
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        19
+      ],
+      "param": 148
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        16
+      ],
+      "param": 149
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        20
+      ],
+      "param": 150
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        17
+      ],
+      "param": 151
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        21
+      ],
+      "param": 152
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        18
+      ],
+      "param": 153
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        22
+      ],
+      "param": 154
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        19
+      ],
+      "param": 155
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        23
+      ],
+      "param": 156
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        24
+      ],
+      "param": 157
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        20,
+        21
+      ],
+      "param": 158
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        21,
+        22
+      ],
+      "param": 159
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        22,
+        23
+      ],
+      "param": 160
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        23,
+        24
+      ],
+      "param": 161
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        6
+      ],
+      "param": 162
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        5
+      ],
+      "param": 163
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        7
+      ],
+      "param": 164
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        6
+      ],
+      "param": 165
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        8
+      ],
+      "param": 166
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        7
+      ],
+      "param": 167
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        9
+      ],
+      "param": 168
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        8
+      ],
+      "param": 169
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        11
+      ],
+      "param": 170
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        10
+      ],
+      "param": 171
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        12
+      ],
+      "param": 172
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        11
+      ],
+      "param": 173
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        13
+      ],
+      "param": 174
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        12
+      ],
+      "param": 175
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        14
+      ],
+      "param": 176
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        13
+      ],
+      "param": 177
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        16
+      ],
+      "param": 178
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        15
+      ],
+      "param": 179
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        17
+      ],
+      "param": 180
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        16
+      ],
+      "param": 181
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        18
+      ],
+      "param": 182
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        17
+      ],
+      "param": 183
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        19
+      ],
+      "param": 184
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        18
+      ],
+      "param": 185
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        21
+      ],
+      "param": 186
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        20
+      ],
+      "param": 187
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        22
+      ],
+      "param": 188
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        21
+      ],
+      "param": 189
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        23
+      ],
+      "param": 190
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        22
+      ],
+      "param": 191
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        24
+      ],
+      "param": 192
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        23
+      ],
+      "param": 193
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        0
+      ],
+      "param": 194
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        1
+      ],
+      "param": 195
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        2
+      ],
+      "param": 196
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        3
+      ],
+      "param": 197
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        4
+      ],
+      "param": 198
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        5
+      ],
+      "param": 199
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        6
+      ],
+      "param": 200
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        7
+      ],
+      "param": 201
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        8
+      ],
+      "param": 202
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        9
+      ],
+      "param": 203
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        10
+      ],
+      "param": 204
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        11
+      ],
+      "param": 205
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        12
+      ],
+      "param": 206
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        13
+      ],
+      "param": 207
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        14
+      ],
+      "param": 208
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        15
+      ],
+      "param": 209
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        16
+      ],
+      "param": 210
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        17
+      ],
+      "param": 211
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        18
+      ],
+      "param": 212
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        19
+      ],
+      "param": 213
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        20
+      ],
+      "param": 214
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        21
+      ],
+      "param": 215
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        22
+      ],
+      "param": 216
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        23
+      ],
+      "param": 217
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        24
+      ],
+      "param": 218
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        0
+      ],
+      "param": 219
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        1
+      ],
+      "param": 220
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        2
+      ],
+      "param": 221
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        3
+      ],
+      "param": 222
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        4
+      ],
+      "param": 223
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        5
+      ],
+      "param": 224
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        6
+      ],
+      "param": 225
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        7
+      ],
+      "param": 226
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        8
+      ],
+      "param": 227
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        9
+      ],
+      "param": 228
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        10
+      ],
+      "param": 229
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        11
+      ],
+      "param": 230
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        12
+      ],
+      "param": 231
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        13
+      ],
+      "param": 232
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        14
+      ],
+      "param": 233
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        15
+      ],
+      "param": 234
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        16
+      ],
+      "param": 235
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        17
+      ],
+      "param": 236
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        18
+      ],
+      "param": 237
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        19
+      ],
+      "param": 238
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        20
+      ],
+      "param": 239
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        21
+      ],
+      "param": 240
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        22
+      ],
+      "param": 241
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        23
+      ],
+      "param": 242
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        24
+      ],
+      "param": 243
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        1
+      ],
+      "param": 244
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        5
+      ],
+      "param": 245
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        2
+      ],
+      "param": 246
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        6
+      ],
+      "param": 247
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        3
+      ],
+      "param": 248
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        7
+      ],
+      "param": 249
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        4
+      ],
+      "param": 250
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        8
+      ],
+      "param": 251
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        9
+      ],
+      "param": 252
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        6
+      ],
+      "param": 253
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        10
+      ],
+      "param": 254
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        7
+      ],
+      "param": 255
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        11
+      ],
+      "param": 256
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        8
+      ],
+      "param": 257
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        12
+      ],
+      "param": 258
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        9
+      ],
+      "param": 259
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        13
+      ],
+      "param": 260
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        14
+      ],
+      "param": 261
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        11
+      ],
+      "param": 262
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        15
+      ],
+      "param": 263
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        12
+      ],
+      "param": 264
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        16
+      ],
+      "param": 265
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        13
+      ],
+      "param": 266
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        17
+      ],
+      "param": 267
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        14
+      ],
+      "param": 268
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        18
+      ],
+      "param": 269
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        19
+      ],
+      "param": 270
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        16
+      ],
+      "param": 271
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        20
+      ],
+      "param": 272
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        17
+      ],
+      "param": 273
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        21
+      ],
+      "param": 274
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        18
+      ],
+      "param": 275
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        22
+      ],
+      "param": 276
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        19
+      ],
+      "param": 277
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        23
+      ],
+      "param": 278
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        24
+      ],
+      "param": 279
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        20,
+        21
+      ],
+      "param": 280
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        21,
+        22
+      ],
+      "param": 281
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        22,
+        23
+      ],
+      "param": 282
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        23,
+        24
+      ],
+      "param": 283
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        0,
+        6
+      ],
+      "param": 284
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        5
+      ],
+      "param": 285
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        1,
+        7
+      ],
+      "param": 286
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        6
+      ],
+      "param": 287
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        2,
+        8
+      ],
+      "param": 288
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        7
+      ],
+      "param": 289
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        3,
+        9
+      ],
+      "param": 290
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        4,
+        8
+      ],
+      "param": 291
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        5,
+        11
+      ],
+      "param": 292
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        10
+      ],
+      "param": 293
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        6,
+        12
+      ],
+      "param": 294
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        11
+      ],
+      "param": 295
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        7,
+        13
+      ],
+      "param": 296
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        12
+      ],
+      "param": 297
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        8,
+        14
+      ],
+      "param": 298
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        9,
+        13
+      ],
+      "param": 299
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        10,
+        16
+      ],
+      "param": 300
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        15
+      ],
+      "param": 301
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        11,
+        17
+      ],
+      "param": 302
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        16
+      ],
+      "param": 303
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        12,
+        18
+      ],
+      "param": 304
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        17
+      ],
+      "param": 305
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        13,
+        19
+      ],
+      "param": 306
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        14,
+        18
+      ],
+      "param": 307
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        15,
+        21
+      ],
+      "param": 308
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        20
+      ],
+      "param": 309
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        16,
+        22
+      ],
+      "param": 310
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        21
+      ],
+      "param": 311
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        17,
+        23
+      ],
+      "param": 312
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        22
+      ],
+      "param": 313
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        18,
+        24
+      ],
+      "param": 314
+    },
+    {
+      "gate": "RZZ",
+      "wires": [
+        19,
+        23
+      ],
+      "param": 315
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        0
+      ],
+      "param": 316
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        1
+      ],
+      "param": 317
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        2
+      ],
+      "param": 318
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        3
+      ],
+      "param": 319
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        4
+      ],
+      "param": 320
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        5
+      ],
+      "param": 321
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        6
+      ],
+      "param": 322
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        7
+      ],
+      "param": 323
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        8
+      ],
+      "param": 324
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        9
+      ],
+      "param": 325
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        10
+      ],
+      "param": 326
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        11
+      ],
+      "param": 327
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        12
+      ],
+      "param": 328
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        13
+      ],
+      "param": 329
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        14
+      ],
+      "param": 330
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        15
+      ],
+      "param": 331
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        16
+      ],
+      "param": 332
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        17
+      ],
+      "param": 333
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        18
+      ],
+      "param": 334
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        19
+      ],
+      "param": 335
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        20
+      ],
+      "param": 336
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        21
+      ],
+      "param": 337
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        22
+      ],
+      "param": 338
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        23
+      ],
+      "param": 339
+    },
+    {
+      "gate": "RZ",
+      "wires": [
+        24
+      ],
+      "param": 340
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        0
+      ],
+      "param": 341
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        1
+      ],
+      "param": 342
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        2
+      ],
+      "param": 343
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        3
+      ],
+      "param": 344
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        4
+      ],
+      "param": 345
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        5
+      ],
+      "param": 346
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        6
+      ],
+      "param": 347
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        7
+      ],
+      "param": 348
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        8
+      ],
+      "param": 349
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        9
+      ],
+      "param": 350
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        10
+      ],
+      "param": 351
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        11
+      ],
+      "param": 352
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        12
+      ],
+      "param": 353
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        13
+      ],
+      "param": 354
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        14
+      ],
+      "param": 355
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        15
+      ],
+      "param": 356
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        16
+      ],
+      "param": 357
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        17
+      ],
+      "param": 358
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        18
+      ],
+      "param": 359
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        19
+      ],
+      "param": 360
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        20
+      ],
+      "param": 361
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        21
+      ],
+      "param": 362
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        22
+      ],
+      "param": 363
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        23
+      ],
+      "param": 364
+    },
+    {
+      "gate": "RX",
+      "wires": [
+        24
+      ],
+      "param": 365
+    }
+  ],
+  "edges": [
+    [
+      0,
+      1,
+      0.11551387853439334
+    ],
+    [
+      0,
+      5,
+      0.6286812151847371
+    ],
+    [
+      1,
+      2,
+      -0.6348851292236379
+    ],
+    [
+      1,
+      6,
+      -0.6160848530600385
+    ],
+    [
+      2,
+      3,
+      0.6272371647737263
+    ],
+    [
+      2,
+      7,
+      -0.9472858476559599
+    ],
+    [
+      3,
+      4,
+      0.742762267599621
+    ],
+    [
+      3,
+      8,
+      -0.13134770116084837
+    ],
+    [
+      4,
+      9,
+      -0.48302849203698744
+    ],
+    [
+      5,
+      6,
+      1.315041822652946
+    ],
+    [
+      5,
+      10,
+      1.8632756498442435
+    ],
+    [
+      6,
+      7,
+      -0.17877494980761152
+    ],
+    [
+      6,
+      11,
+      -1.0525858485631598
+    ],
+    [
+      7,
+      8,
+      -0.9268034000531427
+    ],
+    [
+      7,
+      12,
+      -1.9684994322498444
+    ],
+    [
+      8,
+      9,
+      -0.6016233167729377
+    ],
+    [
+      8,
+      13,
+      -0.1255357562783951
+    ],
+    [
+      9,
+      14,
+      1.135897953082625
+    ],
+    [
+      10,
+      11,
+      1.0656631396461718
+    ],
+    [
+      10,
+      15,
+      -0.5627272152733754
+    ],
+    [
+      11,
+      12,
+      -1.336045804329958
+    ],
+    [
+      11,
+      16,
+      -0.5927508808138037
+    ],
+    [
+      12,
+      13,
+      1.791535353693287
+    ],
+    [
+      12,
+      17,
+      0.12229531725227508
+    ],
+    [
+      13,
+      14,
+      2.1431323674287404
+    ],
+    [
+      13,
+      18,
+      0.1303087360346052
+    ],
+    [
+      14,
+      19,
+      -0.3990934926918054
+    ],
+    [
+      15,
+      16,
+      0.34845813438794854
+    ],
+    [
+      15,
+      20,
+      1.83649364665221
+    ],
+    [
+      16,
+      17,
+      0.5435443010250854
+    ],
+    [
+      16,
+      21,
+      -0.23486965465389448
+    ],
+    [
+      17,
+      18,
+      -0.5744265006332662
+    ],
+    [
+      17,
+      22,
+      1.8162328029670476
+    ],
+    [
+      18,
+      19,
+      1.9801284667667156
+    ],
+    [
+      18,
+      23,
+      0.2732154348257316
+    ],
+    [
+      19,
+      24,
+      1.1460639488576114
+    ],
+    [
+      20,
+      21,
+      -0.5910048861878722
+    ],
+    [
+      21,
+      22,
+      0.7548238591775116
+    ],
+    [
+      22,
+      23,
+      -0.15432025447429834
+    ],
+    [
+      23,
+      24,
+      0.7294395516372126
+    ],
+    [
+      0,
+      6,
+      0.3565197228335718
+    ],
+    [
+      1,
+      5,
+      -0.6906956326149323
+    ],
+    [
+      1,
+      7,
+      -0.4208654793321191
+    ],
+    [
+      2,
+      6,
+      -0.3863212107209768
+    ],
+    [
+      2,
+      8,
+      0.26760195503308515
+    ],
+    [
+      3,
+      7,
+      -0.0866084544770085
+    ],
+    [
+      3,
+      9,
+      0.22851397417493874
+    ],
+    [
+      4,
+      8,
+      -0.04547290335649409
+    ],
+    [
+      5,
+      11,
+      0.2957831168750207
+    ],
+    [
+      6,
+      10,
+      -0.12220136528652838
+    ],
+    [
+      6,
+      12,
+      -0.2318378362992996
+    ],
+    [
+      7,
+      11,
+      0.24815931693999685
+    ],
+    [
+      7,
+      13,
+      -0.49727634275958693
+    ],
+    [
+      8,
+      12,
+      -0.3501008781352054
+    ],
+    [
+      8,
+      14,
+      0.34517807685422497
+    ],
+    [
+      9,
+      13,
+      0.07276383371755482
+    ],
+    [
+      10,
+      16,
+      -0.16025773639852195
+    ],
+    [
+      11,
+      15,
+      0.12892037983168894
+    ],
+    [
+      11,
+      17,
+      -0.538836290605437
+    ],
+    [
+      12,
+      16,
+      -0.2587898692455991
+    ],
+    [
+      12,
+      18,
+      -0.09122888923237202
+    ],
+    [
+      13,
+      17,
+      0.7167407474518599
+    ],
+    [
+      13,
+      19,
+      -0.03813246140874833
+    ],
+    [
+      14,
+      18,
+      -0.44850232060662654
+    ],
+    [
+      15,
+      21,
+      0.16707285579608916
+    ],
+    [
+      16,
+      20,
+      0.041388189194582134
+    ],
+    [
+      16,
+      22,
+      0.1893743036337409
+    ],
+    [
+      17,
+      21,
+      0.06469472647808307
+    ],
+    [
+      17,
+      23,
+      0.4732331574652995
+    ],
+    [
+      18,
+      22,
+      -0.24339317427005797
+    ],
+    [
+      18,
+      24,
+      -0.34194215159172264
+    ],
+    [
+      19,
+      23,
+      -0.07689217612384837
+    ]
+  ],
+  "fields": [
+    [
+      0,
+      -0.10044507888258832
+    ],
+    [
+      1,
+      -0.13807116654820142
+    ],
+    [
+      2,
+      -0.07836470005011745
+    ],
+    [
+      3,
+      -0.03357283777933014
+    ],
+    [
+      4,
+      0.17553360007727045
+    ],
+    [
+      5,
+      0.07453551252589381
+    ],
+    [
+      6,
+      -0.05476757848885816
+    ],
+    [
+      7,
+      0.0076641776979014045
+    ],
+    [
+      8,
+      -0.03563993809397558
+    ],
+    [
+      9,
+      0.19311207129852906
+    ],
+    [
+      10,
+      0.0942380997689713
+    ],
+    [
+      11,
+      0.08816901914619392
+    ],
+    [
+      12,
+      -0.0054471099026010385
+    ],
+    [
+      13,
+      -0.04286014148371744
+    ],
+    [
+      14,
+      0.10392945958394745
+    ],
+    [
+      15,
+      -0.034277521171824525
+    ],
+    [
+      16,
+      -0.015098063087317454
+    ],
+    [
+      17,
+      -0.15044877459004216
+    ],
+    [
+      18,
+      -0.05039878119166474
+    ],
+    [
+      19,
+      -0.2990599441139765
+    ],
+    [
+      20,
+      0.012757884585139177
+    ],
+    [
+      21,
+      -0.09135717100824584
+    ],
+    [
+      22,
+      -0.07877571577538015
+    ],
+    [
+      23,
+      -0.07972570456740544
+    ],
+    [
+      24,
+      -0.013840111789336834
+    ]
+  ],
+  "distilled": "per init: keep gates whose param is in params.json inits[i].active_params, renumbered 0..n_active-1 in order"
+}
