@@ -56,9 +56,11 @@ metric.py                   지표·판정·그림     python metric.py --exp TC
 problems/                   문제 생성 스크립트(make_problems.py), 인스턴스 JSON(전수 조사 해 포함), PNG
 classical/                  TC1·TC2: standard.py, pado_safe.py, standard_long.py, check_pado_vs_pennylane.py, common.py
 quantum/                    TC3: prepare_start_points.py(GPU, 두 방식의 시작점), train_qpu.ipynb(양자컴퓨터 학습), common.py
-                            trial_one_step.ipynb는 실기기 1 step 시운전용 (시험 항목 아님)
-exp1_sampling/              참고 자료 (시험 항목 아님): 5x5 5개 시점의 비트열 샘플링 노트북 (노이즈 없는 PennyLane, Quantinuum H2)
+extras/                     시험 항목 밖의 참고 실험 (판정에 쓰지 않음)
+  sampling_h2/              5x5 5개 시점의 비트열 샘플링 노트북 (노이즈 없는 PennyLane, Quantinuum H2)
+  qpu_trial/                실기기 1 step 시운전 노트북 (시간·usage·배치 확인)
 results_on_<장치>/<TC>/     결과 (예: results_on_MI300X/TC1/, results_on_fake_nighthawk/TC3/). git에는 넣지 않고 서버에만 둔다
+results_on_<장치>/extras/   참고 실험 결과 (코드 폴더와 같은 이름: sampling_h2/, qpu_trial/)
 ```
 
 ## 결과 파일
