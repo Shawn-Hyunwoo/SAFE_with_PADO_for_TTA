@@ -23,13 +23,13 @@ PADO-Pauli(`padopauli`)의 LWPP 대리 모델로 사전학습·증류한 뒤 exa
 환경을 만든 뒤 시험 항목마다 두 줄이다. 결과는 `results_on_<GPU 이름>/<TC>/`에, 지표·판정·그림은 그 안의 `metrics/`에 쓴다.
 
 ```bash
-python run.py --exp TC1 && python metric.py --exp TC1      # 5x5 고전: 약 1.5시간 + 연장 실행 최대 8시간
+python run.py --exp TC1 && python metric.py --exp TC1      # 5x5 고전: 약 1~1.5시간 (연장 실행이 상한 500 step까지 다 가면 최대 8시간)
 python run.py --exp TC2 && python metric.py --exp TC2      # 3x3 고전: 약 10분
 python run.py --exp TC3 && python metric.py --exp TC3      # 3x3 양자컴퓨터: FakeNighthawk 시뮬레이션 약 10분 (실기기는 아래)
 python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점검용 축소판 (3x3, 약 1분)
 ```
 
-`run.py`는 단계마다 `===== [TC1] ...` 줄을 찍는다: 환경 기록 → 문제 파일 확인(생성 스크립트를 다시 돌려 전수 조사 결과가 저장된 파일과 같은지 검사) → PADO-Pauli와 PennyLane의 에너지·기울기 일치 검사 → 인스턴스마다 `standard` → `pado_safe` → `standard_long`. 각 스크립트도 자기 단계(`1/3 LWPP 사전학습`, `2/3 증류`, `3/3 exact 미세조정`)와 step별 AR을 찍는다. 끝난 실행은 건너뛰므로 중단된 뒤 다시 실행하면 이어서 돈다. 완료된 결과 폴더는 덮어쓰지 않는다(`*_smoke`만 예외).
+`run.py`는 단계마다 `===== [TC1] ...` 줄을 찍는다: 환경 기록 → 문제 파일 확인(생성 스크립트를 다시 돌려 전수 조사 결과가 저장된 파일과 같은지 검사) → PADO-Pauli와 PennyLane의 에너지·기울기 일치 검사 → 인스턴스마다 `standard` → `pado_safe` → `standard_long`. 각 스크립트도 자기 단계(`1/3 LWPP 사전학습`, `2/3 증류`, `3/3 exact 미세조정`)와 step별 AR을 찍는다. 끝난 실행은 건너뛰므로 중단된 뒤 다시 실행하면 이어서 돈다. 완료된 결과 폴더는 덮어쓰지 않는다(`*_smoke`만 예외). 연장 실행은 config의 `run_standard_long`(true/false)으로 켜고 끄며, 상한은 `standard_long_max_steps`다(시험합의서대로 TC1 500, TC2 2000). 연장 실행을 끄면 도달 쌍 수와 절감률 R은 계산되지 않는다.
 
 `metric.py`는 `configs/<TC>.json`의 `criteria`로 판정하고 기준마다 PASS/FAIL과 값을 출력한다.
 
@@ -67,7 +67,8 @@ results_on_<장치>/extras/   참고 실험 결과 (코드 폴더와 같은 이�
 
 - `results_on_<GPU>/TC1/<문제>/{standard,pado_safe,standard_long}/`
   - `params.json`: 설정, 패키지 버전, 초기값별 θ_init·θ_final, step별 θ·에너지·AR·시간. `pado_safe`는 LWPP compile·학습 시간과 GPU peak memory, 증류 뒤 남은 각도 번호(`active_params`), 증류 전 exact 에너지도. `standard_long`은 목표 AR과 도달 step.
-  - `circuit.json`(게이트 목록, 각도 규약 R_P(θ) = exp(−iθP/2)), `qasm/`(초기·최종 파라미터를 넣고 측정을 붙인 OpenQASM 2.0), `problem.json/png`.
+  - `circuit.json`(게이트 목록, 각도 규약 R_P(θ) = exp(−iθP/2)), `qasm/`(초기·최종 파라미터를 넣고 측정을 붙인 OpenQASM 2.0).
+  - 문제 파일 `problem.json/png`는 실행 폴더가 아니라 문제 폴더(`results_on_<GPU>/TC1/<문제>/`)에 하나만 둔다.
 - `results_on_<GPU>/TC1/env.txt`: 패키지 목록과 GPU.
 - `results_on_<backend>/TC3/<문제>/{standard,pado_safe}/params.json`: step별 측정 에너지·표준오차·AR, 같은 θ의 노이즈 없는 AR, 기울기, job id, IBM 사용 시간(usage)과 시각. `backend.json`(기기, 캘리브레이션 일자, rep_delay, 큐비트 배치, ISA 회로의 2큐비트 게이트 수·깊이). `pado_safe/pre_distill.json`(증류 전 측정 1회, 집계 제외). 시작점은 `results_on_<GPU>/TC3/<문제>/start_points/`.
 - `metrics/` (metric.py): `pairs.csv`(TC1·TC2 쌍별 AR·τ·C·R·D·환산 shots), `steps.csv`(TC3 step별), `criteria.json`(값, 임계값, PASS/FAIL, 전체 판정, 실행 상태), `energy_curves*.png`, `summary_ar.png`.

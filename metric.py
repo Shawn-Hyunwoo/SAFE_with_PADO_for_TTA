@@ -30,7 +30,7 @@ def judge(values):
     for key, thr in crit.items():
         base, op = key.rsplit("_", 1)
         v = values[base]
-        checks[key] = {"value": v, "threshold": thr,
+        checks[key] = {"value": v, "op": {"gt": ">", "ge": ">=", "le": "<="}[op], "threshold": thr,
                        "pass": None if v is None else bool(v > thr if op == "gt" else v >= thr if op == "ge" else v <= thr)}
     return checks
 
@@ -45,7 +45,7 @@ def write_csv(path, rows):
 def show(checks):
     for key, c in checks.items():
         v = "없음" if c["value"] is None else (f"{c['value']:.4f}" if isinstance(c["value"], float) else str(c["value"]))
-        print(f"  {'PASS' if c['pass'] else ('----' if c['pass'] is None else 'FAIL'):4s}  {key:36s} 값 {v:>10s}  기준 {c['threshold']}")
+        print(f"  {'PASS' if c['pass'] else ('----' if c['pass'] is None else 'FAIL'):4s}  {key:36s} 값 {v:>10s}  기준: 값 {c['op']} {c['threshold']}")
 
 
 # ============================================================ TC1, TC2 (고전 시뮬레이션)
@@ -104,6 +104,9 @@ if cfg["kind"] == "classical":
     d_ar = [r[f"delta_AR{T}"] for r in rows]
     reached = [r for r in rows if r["reached"]]
     tau0 = [r["tau_std_A0"] for r in rows if r["tau_std_Astar"] is not None or r["tau_std_A0"] is not None]
+    longs = [r["standard_long"] for r in recs_all.values() if r["standard_long"]]
+    if longs:
+        T_max = longs[0]["config"]["max_steps"]        # 실제 연장 실행에 쓰인 상한 (config와 다를 수 있다)
     values = {
         "n_pairs": len(rows), "T": T, "T_max": T_max,
         "delta_ar20_min": float(min(d_ar)), "delta_ar20_median": float(np.median(d_ar)),

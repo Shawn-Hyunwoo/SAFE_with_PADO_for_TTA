@@ -12,6 +12,7 @@
   "exact_device": "lightning.amdgpu",
   "lwpp": {"steps": 100, "max_weight": 3, "preset": "gpu", "dtype": "float32"},
   "distill_threshold": 0.3,
+  "run_standard_long": true,
   "standard_long_max_steps": 2000,
   "shots_per_circuit": 1024,
   "criteria": {

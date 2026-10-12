@@ -34,12 +34,17 @@ if cfg["kind"] == "classical":
     print(f"\n===== [{cfg['name']}] PADO-Pauli vs PennyLane 일치 검사 (3x3, 차이 1e-8 이내여야 PASS)", flush=True)
     subprocess.run([PY, "classical/check_pado_vs_pennylane.py"], cwd=REPO, check=True)
 
-    # ---- 인스턴스마다 standard → pado_safe → standard_long. 끝난 실행(params.json 있음)은 건너뛴다
+    # ---- 인스턴스마다 standard → pado_safe → standard_long(연장 실행, config의 run_standard_long이 true일 때만).
+    #      끝난 실행(params.json 있음)은 건너뛴다
+    runs = ["standard", "pado_safe"] + (["standard_long"] if cfg.get("run_standard_long", True) else [])
+    if "standard_long" not in runs:
+        print(f"      (run_standard_long = false: 연장 실행은 하지 않는다. 지표의 도달 쌍·절감률 R은 비게 된다)", flush=True)
     for inst in cfg["instances"]:
         problem = f"{cfg['grid']}_inst{inst}_seed{cfg['seed_base'] + inst}"
-        for run in ["standard", "pado_safe", "standard_long"]:
+        for run in runs:
             done = (root / problem / run / "params.json").exists() and not cfg["name"].endswith("_smoke")
-            print(f"\n===== [{cfg['name']}] {problem} / {run}" + ("  (이미 있음, 건너뜀)" if done else ""), flush=True)
+            print(f"\n===== [{cfg['name']}] {problem} / {run}" + ("  (이미 있음, 건너뜀)" if done else "")
+                  + (f"  (상한 {cfg['standard_long_max_steps']} step)" if run == "standard_long" and not done else ""), flush=True)
             if done:
                 continue
             t0 = time.perf_counter()

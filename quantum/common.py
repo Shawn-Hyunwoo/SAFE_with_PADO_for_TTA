@@ -31,14 +31,16 @@ def env_info():
 
 
 def new_run_dir(experiment, problem_path, run):
-    # results_on_<TAG>/<experiment>/<problem name>/<run>/ ; 끝난 실행은 덮어쓰지 않는다 (이름이 _smoke로 끝나는 실험만 예외)
+    # results_on_<TAG>/<experiment>/<problem name>/<run>/ ; 끝난 실행은 덮어쓰지 않는다 (이름이 _smoke로 끝나는 실험만 예외).
+    # 문제 파일(problem.json, problem.png)은 문제 폴더에 한 번만 복사한다 (실행 폴더마다 두지 않는다)
     problem_path = Path(problem_path)
     d = REPO / f"results_on_{device_tag()}" / experiment / problem_path.stem / run
     if (d / "params.json").exists() and not experiment.endswith("_smoke"):
         raise SystemExit(f"{d} already has a finished run; results are never overwritten")
     (d / "qasm").mkdir(parents=True, exist_ok=True)
-    shutil.copy(problem_path, d / "problem.json")
-    shutil.copy(problem_path.with_suffix(".png"), d / "problem.png")
+    if not (d.parent / "problem.json").exists():
+        shutil.copy(problem_path, d.parent / "problem.json")
+        shutil.copy(problem_path.with_suffix(".png"), d.parent / "problem.png")
     return d
 
 
