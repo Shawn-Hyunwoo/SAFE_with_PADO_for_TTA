@@ -1,65 +1,39 @@
-# SAFE with PADO — TTA 평가용 재현 레포
+# SAFE with PADO — TTA 시험 재현 레포
 
-SAFE(Surrogate-Assisted and Fine-tuning Enhanced) ma-QAOA가 처음부터 exact 최적화를 하는 방식보다 exact 자원을 얼마나 아끼는지 비교한다.
+PADO-Pauli(`padopauli`)의 LWPP 대리 모델로 사전학습·증류한 뒤 exact 미세조정하는 학습 방식(PADO 방식)이, 처음부터 exact 학습만 하는 방식(standard 방식)보다 양자 자원을 얼마나 아끼는지 잰다. 시험 항목 TC1·TC2·TC3의 정의와 판정 기준은 시험합의서를 따르며, 같은 값이 `configs/TC*.json`에 들어 있다.
 
-- **SAFE**: PADO-Pauli(`padopauli`)의 LWPP 대리 모델로 사전학습한 뒤, 크기가 작은 각도를 회로에서 제거(증류)하고, 남은 각도만 exact로 fine-tuning한다. LWPP는 weight가 `max_weight`를 넘는 Pauli 항을 버리는 근사 Pauli 전파다.
-- **exact-only**: 같은 초기값에서 바로 exact로 학습한다.
-- **exact 최적화**: 고전 시뮬레이션에서는 PennyLane 상태벡터의 adjoint 미분, 실기기에서는 parameter-shift이다.
+- PADO 방식 (`pado_safe`): LWPP 사전학습(고전 GPU, 양자 자원 0) → |θ| ≤ 0.3인 게이트를 회로에서 제거(증류) → 남은 각도만 exact 미세조정
+- standard 방식 (`standard`): 같은 초기값에서 exact 학습만. `standard_long`은 PADO 방식의 최종 AR에 닿을 때까지 연장한 실행
+- exact 평가: 고전 시뮬레이션(TC1, TC2)은 PennyLane 상태벡터(adjoint 미분), 양자컴퓨터(TC3)는 parameter-shift
+- 양자 자원: exact step T까지의 회로 수 C(T) = T × (2·N_act + 1) + 1. 고전 시뮬레이션에서는 환산값, TC3에서는 실제 제출한 회로 수
+- LWPP(Low-Weight Pauli Propagation)는 weight가 `max_weight`를 넘는 Pauli 항을 버리는 근사 Pauli 전파다. 대리 모델의 에너지는 지표에 쓰지 않고, 모든 AR은 exact 평가로 계산한다.
 
-비교 지표는 두 가지다.
-1. 같은 exact step 수에서의 approximation ratio(AR)
-2. 같은 AR에 도달하기까지 필요한 exact step 수와 회로 실행 수(QPU 사용량)
+방법 출처: Kim & Lee, "SAFE ma-QAOA" (https://arxiv.org/abs/2605.23377).
 
-방법의 출처는 Kim & Lee, "SAFE ma-QAOA: Surrogate-Assisted and Fine-Tuning Enhanced Multi-Angle QAOA with Parameter Distillation" (https://arxiv.org/abs/2605.23377)이다.
-
-| | 실험 1 (고전 5x5) | 실험 2 (고전 3x3) | 실험 3 (양자 3x3) |
+| | TC1 | TC2 | TC3 |
 |---|---|---|---|
-| 문제 | 5x5 격자, 인스턴스 5개 | 3x3 격자, 인스턴스 5개 | 3x3 격자, 인스턴스 1개 |
-| ansatz | ma-QAOA, p = 3 (366 각도) | ma-QAOA, p = 3 (114 각도) | ma-QAOA, p = 3 (114 각도) |
-| 초기화 | 상수 5종 (γ = +c, β = −c, c = 0.01, 0.05, 0.1, 0.2, 0.4) | 상수 5종 (같음) | 상수 1종 (c = 0.1) |
+| 문제 | 5x5 격자(25큐비트), 인스턴스 5개 | 3x3 격자(9큐비트), 인스턴스 5개 | 3x3 격자, 인스턴스 0 |
+| 초기값 | 상수 5종 (RZZ·RZ = +c, RX = −c, c = 0.01, 0.05, 0.1, 0.2, 0.4) | 같음 | c = 0.1 |
 | LWPP 사전학습 | max_weight 5, 200 step | max_weight 3, 100 step | max_weight 3, 100 step |
-| 증류 | \|θ\| ≤ 0.3 제거 | \|θ\| ≤ 0.3 제거 | \|θ\| ≤ 0.3 제거 |
-| exact 단계 | PennyLane `lightning.amdgpu`, 20 step | PennyLane `lightning.amdgpu`, 20 step (exact-only는 SAFE 최종 AR까지 연장 실행도 함) | Qiskit parameter-shift, SAFE 5 step / exact-only 20 step, 회로당 1024 shots |
+| exact 단계 | PennyLane, 20 step. standard는 PADO 최종 AR까지 연장(상한 500) | PennyLane, 20 step. 연장 상한 2000 | 양자컴퓨터 parameter-shift, PADO 5 step / standard 20 step, 회로당 1024 shots |
+| 실행 환경 | GPU 서버 | GPU 서버 | FakeNighthawk(서버 로컬) 및 IBM 실기기 |
 
-공통 설정은 Adam lr 0.02(기본 betas)이고, LWPP는 `gpu` preset에 float32를 쓴다.
+## 실행 (시험자용)
 
-## 문제
+환경을 만든 뒤 시험 항목마다 두 줄이다. 결과는 `results_on_<GPU 이름>/<TC>/`에, 지표·판정·그림은 그 안의 `metrics/`에 쓴다.
 
-H = Σ_i h_i Z_i + Σ_(i,j) J_ij Z_i Z_j이며 열린 경계 격자를 쓴다.
-- 최근접 이웃(NN) J ~ N(0, 1), 대각 다음 이웃(NNN) J ~ N(0, 0.3²), h ~ N(0, 0.1²)
-- seed = 120490 + 인스턴스 번호
-
-`problems/make_problems.py`는 2^n개 스핀 배치를 모두 계산(brute force)해서 E_min, E_max, 바닥 상태 비트열을 JSON에 저장한다. 같은 이름의 PNG에 격자, 결합, 필드, 바닥 상태 스핀을 그린다. 다시 실행하면 기존 JSON과 같은지 확인하고, 다르면 멈춘다.
-
-AR = (E_max − E) / (E_max − E_min)이다. 그림에서는 brute force E_min을 기준선으로 쓴다.
-
-## 구성
-
+```bash
+python run.py --exp TC1 && python metric.py --exp TC1      # 5x5 고전: 약 1.5시간 + 연장 실행 최대 8시간
+python run.py --exp TC2 && python metric.py --exp TC2      # 3x3 고전: 약 10분
+python run.py --exp TC3 && python metric.py --exp TC3      # 3x3 양자컴퓨터: FakeNighthawk 시뮬레이션 약 10분 (실기기는 아래)
+python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점검용 축소판 (3x3, 약 1분)
 ```
-problems/               문제 생성 스크립트, 인스턴스 JSON, PNG
-exp1_classical_5x5/     실험 1 코드
-  check_pado_vs_pennylane.py   PADO(절단 없음)와 PennyLane의 에너지·기울기 일치 확인 (3x3, 수 초)
-  exact_only.py / safe.py      두 arm
-  exact_only_long.py           exact-only를 SAFE 최종 AR에 닿을 때까지 연장 (최대 500 step)
-  report.py                    표(summary.csv)와 그림(energy_curves.png), 판정 기준 요약값 criteria.json.
-                               연장 실행 결과가 있으면 summary_long.csv, energy_curves_long.png도 쓴다
-exp1_sampling/          실험 1의 연장: 인스턴스 0, c = 0.1의 5개 시점(초기, exact-only 후, SAFE 사전학습 후,
-                        증류 후, fine-tuning 후)을 각각 512 shots 샘플링
-  sample_reference.ipynb       5개 시점 정의(points.json) + 노이즈 없는 샘플(PennyLane lightning.amdgpu)
-  sample_h2.ipynb              Quantinuum H2 실기기 샘플 (pytket + qnexus, 로그인·제출은 사용자가 직접)
-                               두 노트북 모두 결과를 results_on_MI300X/exp1_sampling/<케이스>/<backend>/에 저장하고,
-                               있는 backend를 모두 모아 sampling_hist.png, sampling_ar.png, summary.json을 다시 그림
-exp2_classical_3x3/     실험 2 코드 (실험 1과 같은 코드, 크기·max_weight·LWPP step만 다름) — 실험 3의 고전 기준선
-  exact_only.py / safe.py      두 arm
-  exact_only_long.py           exact-only를 SAFE 최종 AR에 닿을 때까지 연장 (최대 2000 step)
-  report.py                    실험 1과 같은 코드. 표와 그림, criteria.json (연장 실행 결과가 있으면 summary_long.csv, energy_curves_long.png도)
-exp3_quantum_3x3/       실험 3 코드
-  prepare_start_points.py      케이스 1개(인스턴스 0, c = 0.1)의 두 QPU arm 시작점 (SAFE 쪽은 LWPP → 증류, GPU에서 실행)
-  train_qpu.ipynb              QPU 학습 노트북. 기본은 fake backend(FakeNighthawk) 노이즈 시뮬레이션,
-                               BACKEND_MODE = "ibm"과 API 키 셀만 바꾸면 실기기. 9큐비트는 기기 안의 3x3 격자
-                               (최근접 이웃 12쌍이 모두 직접 연결되고 오류가 가장 작은 배치)에 고정해 놓는다
-results_on_<장치>/      실행 결과 (예: results_on_MI300X/)
-```
+
+`run.py`는 단계마다 `===== [TC1] ...` 줄을 찍는다: 환경 기록 → 문제 파일 확인(생성 스크립트를 다시 돌려 전수 조사 결과가 저장된 파일과 같은지 검사) → PADO-Pauli와 PennyLane의 에너지·기울기 일치 검사 → 인스턴스마다 `standard` → `pado_safe` → `standard_long`. 각 스크립트도 자기 단계(`1/3 LWPP 사전학습`, `2/3 증류`, `3/3 exact 미세조정`)와 step별 AR을 찍는다. 끝난 실행은 건너뛰므로 중단된 뒤 다시 실행하면 이어서 돈다. 완료된 결과 폴더는 덮어쓰지 않는다(`*_smoke`만 예외).
+
+`metric.py`는 `configs/<TC>.json`의 `criteria`로 판정하고 기준마다 PASS/FAIL과 값을 출력한다.
+
+**TC3 실기기**: `run.py --exp TC3`는 노이즈 모델 시뮬레이션(FakeNighthawk)까지만 돌린다. 실기기는 `configs/TC3.json`의 `qpu.backend_mode`를 `"ibm"`, `qpu.ibm_backend`에 기기 이름(예: `ibm_nighthawk`)을 넣고, `quantum/train_qpu.ipynb`를 열어 키 셀에 API 키를 넣은 뒤 직접 실행한다(실행 뒤 키 삭제. 비워 두면 이 컴퓨터에 저장된 계정을 쓴다). 결과는 `results_on_<기기 이름>/TC3/`에 쌓이고 `metric.py --exp TC3`는 결과가 있는 backend를 모두 평가한다(`--backend 이름`으로 하나만). `qpu.rep_delay`(shot 사이 대기, 초)는 기기 허용 범위 안에서 정하고 `null`이면 기기 기본값이다. 노트북은 step마다 결과를 저장하므로 끊겨도 다시 실행하면 이어서 돈다.
 
 ## 환경 (AMD GPU, ROCm 7.2)
 
@@ -73,69 +47,35 @@ pip install -r requirements.txt     # padopauli 2.0.1(PyPI), pennylane 0.45.1 + 
 cd /tmp && python -c "import torch, padopauli, pennylane; print(torch.__version__, torch.cuda.is_available(), padopauli.__version__)"
 ```
 
-## 실행
+## 구성
 
-```bash
-python problems/make_problems.py                     # 인스턴스 + brute force (약 3분, 이미 레포에 포함)
-python exp1_classical_5x5/check_pado_vs_pennylane.py # PASS가 나와야 함
-
-# 실험 1: smoke (3x3, 수십 초, 결과는 results_on_<장치>/exp1_smoke/)
-python exp1_classical_5x5/exact_only.py problems/grid3x3_inst0_seed120490.json 2
-python exp1_classical_5x5/safe.py problems/grid3x3_inst0_seed120490.json 60 2
-python exp1_classical_5x5/exact_only_long.py problems/grid3x3_inst0_seed120490.json 50   # safe.py smoke 결과가 먼저 있어야 함
-python exp1_classical_5x5/report.py exp1_smoke
-
-# 실험 1: 본 실행 (인스턴스 0-4)
-for i in 0 1 2 3 4; do python exp1_classical_5x5/exact_only.py $i && python exp1_classical_5x5/safe.py $i; done
-for i in 0 1 2 3 4; do python exp1_classical_5x5/exact_only_long.py $i; done   # safe.py 결과가 먼저 있어야 함 (step당 약 2.4초, 최대 약 8시간)
-python exp1_classical_5x5/report.py
-
-# 실험 1 샘플링: exp1_sampling/에서 sample_reference.ipynb (노이즈 없는 샘플, 수 초)
-#               → sample_h2.ipynb (Nexus 로그인 후 직접 실행, SUBMIT = True로 제출)
-
-# 실험 2: 3x3 고전 (인스턴스 0-4, 약 2분)
-for i in 0 1 2 3 4; do python exp2_classical_3x3/exact_only.py $i && python exp2_classical_3x3/safe.py $i; done
-for i in 0 1 2 3 4; do python exp2_classical_3x3/exact_only_long.py $i; done   # safe.py 결과가 먼저 있어야 함 (약 3분)
-python exp2_classical_3x3/report.py
-
-# 실험 3: QPU 런 두 arm의 시작점 (인스턴스 0, c = 0.1, 수십 초, GPU)
-python exp3_quantum_3x3/prepare_start_points.py
-# 실험 3: QPU 학습 — exp3_quantum_3x3/train_qpu.ipynb를 그 폴더에서 열어 실행 (FakeNighthawk 기준 약 15분)
-cd exp3_quantum_3x3 && jupyter nbconvert --to notebook --execute --inplace train_qpu.ipynb
+```
+configs/                    시험 설정 (문제·회로·학습·판정 기준): TC1.json, TC2.json, TC3.json, TC1_smoke.json
+run.py                      시험 실행기        python run.py --exp TC1
+metric.py                   지표·판정·그림     python metric.py --exp TC1
+problems/                   문제 생성 스크립트(make_problems.py), 인스턴스 JSON(전수 조사 해 포함), PNG
+classical/                  TC1·TC2: standard.py, pado_safe.py, standard_long.py, check_pado_vs_pennylane.py, common.py
+quantum/                    TC3: prepare_start_points.py(GPU, 두 방식의 시작점), train_qpu.ipynb(양자컴퓨터 학습), common.py
+                            trial_one_step.ipynb는 실기기 1 step 시운전용 (시험 항목 아님)
+exp1_sampling/              참고 자료 (시험 항목 아님): 5x5 5개 시점의 비트열 샘플링 노트북 (노이즈 없는 PennyLane, Quantinuum H2)
+results_on_<장치>/<TC>/     결과 (예: results_on_MI300X/TC1/, results_on_fake_nighthawk/TC3/). git에는 넣지 않고 서버에만 둔다
 ```
 
-완료된 결과 폴더는 덮어쓰지 않는다. smoke 결과(`exp1_smoke`)만 예외다.
+## 결과 파일
 
-## 지표 (`exp1_classical_5x5/report.py`, `exp2_classical_3x3/report.py`)
+- `results_on_<GPU>/TC1/<문제>/{standard,pado_safe,standard_long}/`
+  - `params.json`: 설정, 패키지 버전, 초기값별 θ_init·θ_final, step별 θ·에너지·AR·시간. `pado_safe`는 LWPP compile·학습 시간과 GPU peak memory, 증류 뒤 남은 각도 번호(`active_params`), 증류 전 exact 에너지도. `standard_long`은 목표 AR과 도달 step.
+  - `circuit.json`(게이트 목록, 각도 규약 R_P(θ) = exp(−iθP/2)), `qasm/`(초기·최종 파라미터를 넣고 측정을 붙인 OpenQASM 2.0), `problem.json/png`.
+- `results_on_<GPU>/TC1/env.txt`: 패키지 목록과 GPU.
+- `results_on_<backend>/TC3/<문제>/{standard,pado_safe}/params.json`: step별 측정 에너지·표준오차·AR, 같은 θ의 노이즈 없는 AR, 기울기, job id, IBM 사용 시간(usage)과 시각. `backend.json`(기기, 캘리브레이션 일자, rep_delay, 큐비트 배치, ISA 회로의 2큐비트 게이트 수·깊이). `pado_safe/pre_distill.json`(증류 전 측정 1회, 집계 제외). 시작점은 `results_on_<GPU>/TC3/<문제>/start_points/`.
+- `metrics/` (metric.py): `pairs.csv`(TC1·TC2 쌍별 AR·τ·C·R·D·환산 shots), `steps.csv`(TC3 step별), `criteria.json`(값, 임계값, PASS/FAIL, 전체 판정, 실행 상태), `energy_curves*.png`, `summary_ar.png`.
 
-exact step은 t = 0..20이다. t = 0은 업데이트 전 시작점, t = 20은 20번 업데이트한 뒤다.
-- `ar_exact_only_first/last`, `ar_safe_first/last`: 각 arm의 처음과 마지막 AR. SAFE의 first는 사전학습과 증류 직후다.
-- `ar_safe_lwpp_only`: 증류 전 LWPP 최종 파라미터의 exact AR.
-- `tau_target_*`: exact-only가 마지막에 도달한 AR에 처음 닿는 step. SAFE가 끝내 못 닿으면 비워 두고 실패로 센다.
-- `tau099_*`: 자기 궤적 최고 AR의 99%에 처음 닿는 step (논문 정의).
-- `circuits_per_step_*` = 2·N_active + 1: parameter-shift 기울기 한 번과 에너지 한 번에 드는 회로 수. 증류된 게이트는 회로에서 빠진다.
-- `circuits_to_target_*` = τ × 스텝당 회로 수 + 1. 마지막 1은 갱신이 끝난 파라미터의 에너지를 확인하는 회로이며, 실험 3 노트북이 세는 방식과 같다. `circuit_saving` = 1 − SAFE / exact-only.
+## 지표 (metric.py, 시험합의서의 산정식)
 
-연장 실행 지표 (`report.py` → `summary_long.csv`; 최대 step은 실험 1이 500, 실험 2가 2000). 목표는 각 (인스턴스, 초기값) 쌍에서 SAFE가 20 step 뒤 도달한 AR이다.
-- `steps_safe_to_target`, `steps_exact_only_to_target`: 각 arm이 목표 AR에 처음 닿은 step. exact-only가 최대 step 안에 못 닿으면 비워 둔다.
-- `steps_exact_only_to_safe_first`: exact-only가 SAFE의 시작 AR(사전학습·증류 직후)에 처음 닿은 step.
-- `circuits_*_to_target` = step × (2·N_active + 1) + 1, `circuit_saving_to_target` = 1 − SAFE / exact-only. 실기기라면 여기에 회로당 shot 수가 곱해진다.
-- `max_dE_first_steps_vs_exact_only`: 연장 실행의 앞부분이 `exact_only.py`와 같은지 확인하는 값 (0이어야 함).
+- AR = (E_max − E)/(E_max − E_min). E_min·E_max는 전수 조사. AR(T)는 exact step T(갱신 T회 뒤)에서의 값, T = 0은 시작점.
+- ΔAR(20) = AR_PADO(20) − AR_std(20). 잔존 비율 D = N_act / N.
+- 목표 품질 A* = AR_PADO(20). τ(A) = AR ≥ A에 처음 닿는 step(상한 안에 못 닿으면 미도달). C = τ × (2N+1) + 1. 회로 절감률 R = 1 − C_PADO / C_std. τ_std(A_0)은 standard가 PADO의 시작 AR에 닿는 step.
+- TC3: 같은 기기에서 잰 AR^Q, 실제 회로 수와 shots, R_C = C_PADO(5) / C_std(20), 노이즈 격차 G = |AR^Q − AR^noiseless|(기록).
+- 판정 기준은 `configs/<TC>.json`의 `criteria`다. 키 끝의 `gt`/`ge`/`le`가 비교 방향이고, 결과는 `criteria.json`의 `checks`에 값과 함께 남는다.
 
-판정 기준 요약값 (`report.py` → `criteria.json`). 시험합의서의 기호를 쓴다 (PADO = SAFE, std = exact-only).
-- `delta_AR20_min`, `delta_AR20_median`: ΔAR(20) = AR_SAFE(20) − AR_exact-only(20)의 최솟값과 중앙값.
-- `n_pairs_AR_PADO0_ge_AR_std20`: SAFE의 시작 AR이 exact-only의 20 step 뒤 AR 이상인 쌍의 수.
-- `D_max`: 잔존 비율 D = N_active / N의 최댓값.
-- `long`: 연장 실행이 있을 때. 도달 쌍 수 `n_reached`, 회로 절감률 `R_median`·`R_min`, exact-only가 SAFE 시작 AR에 닿는 step의 최솟값 `tau_std_A0_min`. 최대 step 안에 SAFE 시작 AR에도 못 닿은 쌍은 `n_tau_std_A0_unreached`로 세며, 그 쌍의 step 수는 최대 step 이상으로 본다.
-
-## 저장 포맷 (실행 폴더마다)
-
-- `problem.json`, `problem.png`: 푼 문제
-- `circuit.json`: 게이트 목록(순서대로)과 각도 규약 R_P(θ) = exp(−iθP/2), 관측량
-- `params.json`: 저장하는 값은 아래와 같다.
-  - 초기값별 θ_init, (SAFE는) θ_lwpp_final과 남은 각도 번호(`active_params`)
-  - 매 step의 θ, 에너지, AR, 그리고 θ_final
-  - 설정, 패키지 버전, 시간과 메모리
-- `qasm/*.qasm`: 초기·최종 파라미터를 대입하고 측정을 붙인 OpenQASM 2.0. 다른 하드웨어에서 그대로 실행할 수 있다.
-
-참고: PennyLane의 torch 인터페이스는 결과를 torch 기본 dtype으로 돌려준다. 그래서 스크립트 첫머리에서 `torch.set_default_dtype(torch.float64)`로 설정한다. 이 설정이 없으면 exact 에너지가 float32로 반올림된다. PADO의 float32 계산 결과에는 영향이 없다.
+참고: PennyLane의 torch 인터페이스는 결과를 torch 기본 dtype으로 돌려주므로 스크립트 첫머리에서 `torch.set_default_dtype(torch.float64)`로 설정한다. 이 설정이 없으면 exact 에너지가 float32로 반올림된다.

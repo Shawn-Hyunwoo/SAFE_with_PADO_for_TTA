@@ -1,5 +1,6 @@
-# Shared by the scripts of this folder only: device tag, result folder, JSON save, circuit/QASM export.
+# 이 폴더 스크립트들의 공용 함수: 장치 태그, 환경 정보, 결과 폴더, JSON 저장, QASM 저장.
 import json
+import platform
 import re
 import shutil
 from pathlib import Path
@@ -19,10 +20,20 @@ def device_tag():
     return m.group(0).upper() if m else re.sub(r"[^A-Za-z0-9]+", "_", name).strip("_")
 
 
-def new_run_dir(experiment, problem_path, arm):
-    # results_on_<TAG>/<experiment>/<problem name>/<arm>/ ; refuses to overwrite a finished run (smoke runs excepted)
+def env_info():
+    # 결과 파일에 남기는 환경 정보 (패키지 버전, GPU)
+    import padopauli
+    import pennylane
+    import qiskit
+    return {"python": platform.python_version(), "torch": torch.__version__, "padopauli": padopauli.__version__,
+            "pennylane": pennylane.__version__, "qiskit": qiskit.__version__,
+            "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None}
+
+
+def new_run_dir(experiment, problem_path, run):
+    # results_on_<TAG>/<experiment>/<problem name>/<run>/ ; 끝난 실행은 덮어쓰지 않는다 (이름이 _smoke로 끝나는 실험만 예외)
     problem_path = Path(problem_path)
-    d = REPO / f"results_on_{device_tag()}" / experiment / problem_path.stem / arm
+    d = REPO / f"results_on_{device_tag()}" / experiment / problem_path.stem / run
     if (d / "params.json").exists() and not experiment.endswith("_smoke"):
         raise SystemExit(f"{d} already has a finished run; results are never overwritten")
     (d / "qasm").mkdir(parents=True, exist_ok=True)
@@ -36,7 +47,7 @@ def save_json(path, obj):
 
 
 def save_qasm(path, n_qubits, gates, theta):
-    # OpenQASM 2.0 with angles bound and a final Z-basis measurement (for later hardware runs)
+    # 각도를 대입하고 Z 기저 측정을 붙인 OpenQASM 2.0 (다른 하드웨어에서 다시 돌릴 때 사용)
     qc = QuantumCircuit(n_qubits)
     for g in gates:
         if g["gate"] == "H":

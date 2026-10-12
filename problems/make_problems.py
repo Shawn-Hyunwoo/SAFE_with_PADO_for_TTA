@@ -2,7 +2,9 @@
 # NN ~ N(0, 1), NNN (both diagonals) ~ N(0, 0.3^2), h ~ N(0, 0.1^2), open boundary, seed = 120490 + inst.
 # Writes <name>.json (with exhaustive E_min / E_max) and <name>.png next to this script.
 # Re-running is a reproducibility check: an existing JSON must come out identical.
+# Usage: python problems/make_problems.py [--grid grid3x3]     (--grid: that grid size only; default all)
 import json
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -15,6 +17,8 @@ INSTANCES = [(5, 5, 0), (5, 5, 1), (5, 5, 2), (5, 5, 3), (5, 5, 4),
 SEED_BASE = 120490
 NN_STD, NNN_STD, FIELD_STD = 1.0, 0.3, 0.1
 OUT_DIR = Path(__file__).resolve().parent
+if "--grid" in sys.argv:  # e.g. --grid grid3x3
+    INSTANCES = [t for t in INSTANCES if f"grid{t[0]}x{t[1]}" == sys.argv[sys.argv.index("--grid") + 1]]
 
 for rows, cols, inst in INSTANCES:
     seed = SEED_BASE + inst
