@@ -1,6 +1,6 @@
 # SAFE with PADO — TTA 시험 재현 레포
 
-PADO-Pauli(`padopauli`)의 LWPP 대리 모델로 사전학습·증류한 뒤 exact 미세조정하는 학습 방식(PADO 방식)이, 처음부터 exact 학습만 하는 방식(standard 방식)보다 양자 자원을 얼마나 아끼는지 잰다. 시험 항목 TC1·TC2·TC3의 정의와 판정 기준은 시험합의서를 따르며, 같은 값이 `configs/TC*.json`에 들어 있다.
+PADO-Pauli(`padopauli` 또는 `hipauli`)의 LWPP 대리 모델로 사전학습·증류한 뒤 exact 미세조정하는 학습 방식(PADO 방식)이, 처음부터 exact 학습만 하는 방식(standard 방식)보다 양자 자원을 얼마나 아끼는지 잰다. 시험 항목 TC1·TC2·TC3의 정의와 판정 기준은 시험합의서를 따르며, 같은 값이 `configs/TC*.json`에 들어 있다.
 
 - PADO 방식 (`pado_safe`): LWPP 사전학습(고전 GPU, 양자 자원 0) → |θ| ≤ 0.3인 게이트를 회로에서 제거(증류) → 남은 각도만 exact 미세조정
 - standard 방식 (`standard`): 같은 초기값에서 exact 학습만. `standard_long`은 PADO 방식의 최종 AR에 닿을 때까지 연장한 실행
@@ -23,6 +23,7 @@ PADO-Pauli(`padopauli`)의 LWPP 대리 모델로 사전학습·증류한 뒤 exa
 환경을 만든 뒤 시험 항목마다 두 줄이다. 결과는 `results_on_<GPU 이름>/<TC>/`에, 지표·판정·그림은 그 안의 `metrics/`에 쓴다.
 
 ```bash
+conda activate <env>                                       # padopauli 또는 hipauli가 설치된 환경 활성화
 python run.py --exp TC1 && python metric.py --exp TC1      # 5x5 고전: 약 1~1.5시간 (연장 실행이 상한 500 step까지 다 가면 최대 8시간)
 python run.py --exp TC2 && python metric.py --exp TC2      # 3x3 고전: 약 10분
 python run.py --exp TC3 && python metric.py --exp TC3      # 3x3 양자컴퓨터: FakeNighthawk 시뮬레이션 약 10분 (실기기는 아래)
@@ -37,14 +38,15 @@ python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점
 
 ## 환경 (AMD GPU, ROCm 7.2)
 
-Python 3.11, AMD Instinct GPU(MI300X에서 검증)를 기준으로 한다. 순서가 중요하다. ROCm torch를 먼저 설치해야 `padopauli`가 CUDA torch를 끌어오지 않는다.
+Python 3.11, AMD Instinct GPU(MI300X에서 검증)를 기준으로 한다. PADO-Pauli 대리 모델 엔진은 공개 PyPI 패키지(`padopauli 2.0.1`) 또는 ROCm C++/HIP 가속 패키지(`hipauli`) 두 환경 모두 지원하며, 스크립트는 실행 환경에 `hipauli`가 설치되어 있으면 이를 우선 사용하고 없으면 `padopauli`를 사용한다(동일 API·동일 수치 결과). 순서가 중요하다. ROCm torch를 먼저 설치해야 `padopauli`가 CUDA torch를 끌어오지 않는다.
 
 ```bash
 conda create -n <env> python=3.11.15 -y
 conda activate <env>
 pip install "torch==2.11.*" --index-url https://download.pytorch.org/whl/rocm7.2
 pip install -r requirements.txt     # padopauli 2.0.1(PyPI), pennylane 0.45.1 + lightning-amdgpu 0.45.0, qiskit 2.5.1 ...
-cd /tmp && python -c "import torch, padopauli, pennylane; print(torch.__version__, torch.cuda.is_available(), padopauli.__version__)"
+# (선택) hipauli 가속 환경에서는 hipauli 패키지가 설치된 환경을 그대로 활성화하여 실행 가능
+cd /tmp && python -c "import torch, pennylane; p = __import__('hipauli') if __import__('importlib.util').util.find_spec('hipauli') else __import__('padopauli'); print(torch.__version__, torch.cuda.is_available(), p.__name__, p.__version__)"
 ```
 
 ## 구성
