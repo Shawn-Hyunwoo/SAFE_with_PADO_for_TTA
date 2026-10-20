@@ -7,7 +7,10 @@ from pathlib import Path
 import numpy as np
 import pennylane as qml
 import torch
-from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
+try:
+    from hipauli import CliffordGate, PauliRotation, PauliSum, compile_program
+except ImportError:
+    from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
 
 PROBLEM = Path(__file__).resolve().parents[1] / "problems" / "grid3x3_inst0_seed120490.json"
 P_LAYERS = 3

@@ -10,7 +10,10 @@ from pathlib import Path
 import numpy as np
 import pennylane as qml
 import torch
-from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
+try:
+    from hipauli import CliffordGate, PauliRotation, PauliSum, compile_program
+except ImportError:
+    from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
 
 from common import REPO, env_info, new_run_dir, save_json, save_qasm
 

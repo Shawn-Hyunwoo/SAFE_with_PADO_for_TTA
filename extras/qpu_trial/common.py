@@ -22,7 +22,10 @@ def device_tag():
 
 def env_info():
     # 결과 파일에 남기는 환경 정보 (패키지 버전, GPU)
-    import padopauli
+    try:
+        import hipauli as padopauli
+    except ImportError:
+        import padopauli
     import pennylane
     import qiskit
     return {"python": platform.python_version(), "torch": torch.__version__, "padopauli": padopauli.__version__,
