@@ -12,7 +12,7 @@
   "lwpp": {"steps": 100, "max_weight": 3, "preset": "gpu", "dtype": "float32"},
   "distill_threshold": 0.3,
   "qpu": {
-    "backend_mode": "ibm",
+    "backend_mode": "fake",
     "fake_backend": "FakeNighthawk",
     "ibm_backend": "ibm_phoenix",
     "shots": 512,

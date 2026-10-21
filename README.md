@@ -26,7 +26,8 @@ PADO-Pauli(`padopauli` 또는 `hipauli`)의 LWPP 대리 모델로 사전학습·
 conda activate <env>                                       # padopauli 또는 hipauli가 설치된 환경 활성화
 python run.py --exp TC1 && python metric.py --exp TC1      # 5x5 고전: 약 1~1.5시간 (연장 실행이 상한 500 step까지 다 가면 최대 8시간)
 python run.py --exp TC2 && python metric.py --exp TC2      # 3x3 고전: 약 10분
-python run.py --exp TC3 && python metric.py --exp TC3      # 3x3 양자컴퓨터: FakeNighthawk 시뮬레이션 약 10분 (실기기는 아래)
+python run.py --exp TC3 && python metric.py --exp TC3      # 3x3 양자(기본값 backend_mode="fake"): FakeNighthawk 노이즈 시뮬레이션으로 끝까지 실행 (약 5분)
+                                                           # 실제 QPU 실행은 configs/TC3.json의 backend_mode를 "ibm"으로 바꾼 뒤 quantum/train_qpu.ipynb 직접 실행 → python metric.py --exp TC3
 python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점검용 축소판 (3x3, 약 1분)
 ```
 
@@ -34,7 +35,7 @@ python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점
 
 `metric.py`는 `configs/<TC>.json`의 `criteria`로 판정하고 기준마다 PASS/FAIL과 값을 출력한다.
 
-**TC3 실기기**: `run.py --exp TC3`는 노이즈 모델 시뮬레이션(FakeNighthawk)까지만 돌린다. 실기기는 `configs/TC3.json`의 `qpu.backend_mode`를 `"ibm"`, `qpu.ibm_backend`에 기기 이름(예: `ibm_phoenix`)을 넣고, `quantum/train_qpu.ipynb`를 열어 키 셀에 API 키를 넣은 뒤 직접 실행한다(실행 뒤 키 삭제. 비워 두면 이 컴퓨터에 저장된 계정을 쓴다). 결과는 `results_on_<기기 이름>/TC3/`에 쌓이고 `metric.py --exp TC3`는 결과가 있는 backend를 모두 평가한다(`--backend 이름`으로 하나만). `qpu.rep_delay`(shot 사이 대기, 초)는 기기 허용 범위 안에서 정하고 `null`이면 기기 기본값이다. 노트북은 step마다 결과를 저장하므로 끊겨도 다시 실행하면 이어서 돈다.
+**TC3 실행 안내 (`FakeNighthawk` 기본값 vs 실제 QPU 실행)**: `configs/TC3.json`의 `qpu.backend_mode` 기본값은 `"fake"`이므로, `python run.py --exp TC3`를 실행하면 GPU 시작점 생성(`quantum/prepare_start_points.py`) 뒤 `FakeNighthawk` 노이즈 모델 시뮬레이터로 `quantum/train_qpu.ipynb` 전체를 끝까지 자동 실행한다. 실제 양자컴퓨터(QPU)에서 실행하려면 `configs/TC3.json`의 `qpu.backend_mode`를 `"ibm"`으로 바꾸고(`qpu.ibm_backend`: `"ibm_phoenix"`), **`quantum/train_qpu.ipynb` 노트북을 직접 열어** API 키 셀에 키를 입력한 뒤 셀들을 순서대로 실행하고(실행 뒤 키 삭제, 비워 두면 저장된 IBM 계정 사용), 완료 후 터미널에서 `python metric.py --exp TC3`를 실행한다. 결과는 `results_on_<기기 이름>/TC3/`에 쌓이고 `metric.py --exp TC3`는 결과가 있는 backend를 모두 평가한다(`--backend 이름`으로 하나만). 노트북은 step마다 결과를 저장하므로 끊겨도 다시 실행하면 이어서 돈다.
 
 ## 환경 (AMD GPU, ROCm 7.2)
 
