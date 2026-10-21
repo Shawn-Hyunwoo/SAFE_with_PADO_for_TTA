@@ -15,8 +15,8 @@ PADO-Pauli(`padopauli` 또는 `hipauli`)의 LWPP 대리 모델로 사전학습·
 | 문제 | 5x5 격자(25큐비트), 인스턴스 5개 | 3x3 격자(9큐비트), 인스턴스 5개 | 3x3 격자, 인스턴스 0 |
 | 초기값 | 상수 5종 (RZZ·RZ = +c, RX = −c, c = 0.01, 0.05, 0.1, 0.2, 0.4) | 같음 | c = 0.1 |
 | LWPP 사전학습 | max_weight 5, 200 step | max_weight 3, 100 step | max_weight 3, 100 step |
-| exact 단계 | PennyLane, 20 step. standard는 PADO 최종 AR까지 연장(상한 500) | PennyLane, 20 step. 연장 상한 2000 | 양자컴퓨터 parameter-shift, PADO 5 step / standard 20 step, 회로당 1024 shots |
-| 실행 환경 | GPU 서버 | GPU 서버 | FakeNighthawk(서버 로컬) 및 IBM 실기기 |
+| exact 단계 | PennyLane, 20 step. standard는 PADO 최종 AR까지 연장(상한 500) | PennyLane, 20 step. 연장 상한 2000 | 양자컴퓨터 parameter-shift, PADO 3 step / standard 12 step, 회로당 512 shots |
+| 실행 환경 | GPU 서버 | GPU 서버 | FakeNighthawk(서버 로컬) 및 IBM 실기기 (`ibm_phoenix`) |
 
 ## 실행 (시험자용)
 
@@ -34,7 +34,7 @@ python run.py --exp TC1_smoke && python metric.py --exp TC1_smoke   # 코드 점
 
 `metric.py`는 `configs/<TC>.json`의 `criteria`로 판정하고 기준마다 PASS/FAIL과 값을 출력한다.
 
-**TC3 실기기**: `run.py --exp TC3`는 노이즈 모델 시뮬레이션(FakeNighthawk)까지만 돌린다. 실기기는 `configs/TC3.json`의 `qpu.backend_mode`를 `"ibm"`, `qpu.ibm_backend`에 기기 이름(예: `ibm_nighthawk`)을 넣고, `quantum/train_qpu.ipynb`를 열어 키 셀에 API 키를 넣은 뒤 직접 실행한다(실행 뒤 키 삭제. 비워 두면 이 컴퓨터에 저장된 계정을 쓴다). 결과는 `results_on_<기기 이름>/TC3/`에 쌓이고 `metric.py --exp TC3`는 결과가 있는 backend를 모두 평가한다(`--backend 이름`으로 하나만). `qpu.rep_delay`(shot 사이 대기, 초)는 기기 허용 범위 안에서 정하고 `null`이면 기기 기본값이다. 노트북은 step마다 결과를 저장하므로 끊겨도 다시 실행하면 이어서 돈다.
+**TC3 실기기**: `run.py --exp TC3`는 노이즈 모델 시뮬레이션(FakeNighthawk)까지만 돌린다. 실기기는 `configs/TC3.json`의 `qpu.backend_mode`를 `"ibm"`, `qpu.ibm_backend`에 기기 이름(예: `ibm_phoenix`)을 넣고, `quantum/train_qpu.ipynb`를 열어 키 셀에 API 키를 넣은 뒤 직접 실행한다(실행 뒤 키 삭제. 비워 두면 이 컴퓨터에 저장된 계정을 쓴다). 결과는 `results_on_<기기 이름>/TC3/`에 쌓이고 `metric.py --exp TC3`는 결과가 있는 backend를 모두 평가한다(`--backend 이름`으로 하나만). `qpu.rep_delay`(shot 사이 대기, 초)는 기기 허용 범위 안에서 정하고 `null`이면 기기 기본값이다. 노트북은 step마다 결과를 저장하므로 끊겨도 다시 실행하면 이어서 돈다.
 
 ## 환경 (AMD GPU, ROCm 7.2)
 
@@ -80,7 +80,7 @@ results_on_<장치>/extras/   참고 실험 결과 (코드 폴더와 같은 이�
 - AR = (E_max − E)/(E_max − E_min). E_min·E_max는 전수 조사. AR(T)는 exact step T(갱신 T회 뒤)에서의 값, T = 0은 시작점.
 - ΔAR(20) = AR_PADO(20) − AR_std(20). 잔존 비율 D = N_act / N.
 - 목표 품질 A* = AR_PADO(20). τ(A) = AR ≥ A에 처음 닿는 step(상한 안에 못 닿으면 미도달). C = τ × (2N+1) + 1. 회로 절감률 R = 1 − C_PADO / C_std. τ_std(A_0)은 standard가 PADO의 시작 AR에 닿는 step.
-- TC3: 같은 기기에서 잰 AR^Q, 실제 회로 수와 shots, R_C = C_PADO(5) / C_std(20), 노이즈 격차 G = |AR^Q − AR^noiseless|(기록).
+- TC3: 같은 기기에서 잰 AR^Q, 실제 회로 수와 shots, R_C = C_PADO(3) / C_std(12), 노이즈 격차 G = |AR^Q − AR^noiseless|(기록).
 - 판정 기준은 `configs/<TC>.json`의 `criteria`다. 키 끝의 `gt`/`ge`/`le`가 비교 방향이고, 결과는 `criteria.json`의 `checks`에 값과 함께 남는다.
 
 참고: PennyLane의 torch 인터페이스는 결과를 torch 기본 dtype으로 돌려주므로 스크립트 첫머리에서 `torch.set_default_dtype(torch.float64)`로 설정한다. 이 설정이 없으면 exact 에너지가 float32로 반올림된다.
