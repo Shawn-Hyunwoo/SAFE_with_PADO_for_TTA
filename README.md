@@ -10,6 +10,34 @@ PADO-Pauli(`padopauli` 또는 `hipauli`)의 LWPP 대리 모델로 사전학습·
 
 방법 출처: Kim & Lee, "SAFE ma-QAOA" (https://arxiv.org/abs/2605.23377).
 
+## 문제와 양자 회로 (2D Ising & ma-QAOA)
+
+2차원 열린 경계($L \times L$) 격자 위에서 최근접(NN)·차근접 대각선(NNN) 상호작용과 세로 자기장을 갖는 **2D 스핀 글래스 이징(Ising) 바닥상태 탐색 문제**를 푼다.
+
+$$H = \sum_{(i,j) \in E_{\text{NN}} \cup E_{\text{NNN}}} J_{ij} Z_i Z_j + \sum_{i=0}^{n-1} h_i Z_i$$
+
+- **계수 분포**: 최근접 결합 $J_{ij}^{\text{NN}} \sim \mathcal{N}(0, 1^2)$, 대각선 차근접 결합 $J_{ij}^{\text{NNN}} \sim \mathcal{N}(0, 0.3^2)$, 국소 자기장 $h_i \sim \mathcal{N}(0, 0.1^2)$ (`seed = 120490 + inst`)
+- **목표**: 바닥상태 에너지 $E_{\min} = \min_{z \in \{\pm 1\}^n} E(z)$에 가까워지도록 근사비 $\text{AR}(\boldsymbol{\theta}) = \frac{E_{\max} - \langle \psi(\boldsymbol{\theta}) | H | \psi(\boldsymbol{\theta}) \rangle}{E_{\max} - E_{\min}} \in [0, 1]$를 최대화 ($E_{\min}, E_{\max}$는 $2^n$개 스핀 배치 전수 조사로 계산)
+
+```text
+  (0) ─── (1) ─── (2)      ───  : 최근접 결합 J_ij^NN  ~ N(0, 1.0^2)
+   │ ╲   ╱ │ ╲   ╱ │       ╲ ╱  : 대각선 결합 J_ij^NNN ~ N(0, 0.3^2)
+   │   ╳   │   ╳   │       (q)  : 큐비트 q의 국소 자기장 h_q ~ N(0, 0.1^2)
+   │ ╱   ╲ │ ╱   ╲ │
+  (3) ─── (4) ─── (5)      * 3x3 격자 (n=9):  NN 12개 + NNN  8개 = 간선 20개, 필드 9개
+   │ ╲   ╱ │ ╲   ╱ │       * 5x5 격자 (n=25): NN 40개 + NNN 32개 = 간선 72개, 필드 25개
+   │   ╳   │   ╳   │
+   │ ╱   ╲ │ ╱   ╲ │
+  (6) ─── (7) ─── (8)
+```
+
+**회로 (ma-QAOA, 깊이 $p=3$)**: 초기 상태 $|+\rangle^{\otimes n} = H^{\otimes n}|0\rangle^{\otimes n}$ 위에, 층($l=1,\dots,p$)마다 **모든 게이트가 독립 파라미터 $\theta_k$를 갖는** 다중각도 QAOA 회로를 쌓는다 ($R_P(\theta) = \exp(-i\theta P / 2)$).
+
+$$|\psi(\boldsymbol{\theta})\rangle = \left[ \prod_{l=1}^{p} \left( \prod_{i=0}^{n-1} R_X(\theta_{l,i}^X) \right) \left( \prod_{i=0}^{n-1} R_Z(\theta_{l,i}^Z) \right) \left( \prod_{(i,j) \in E} R_{ZZ}(\theta_{l,ij}^{ZZ}) \right) \right] H^{\otimes n} |0\rangle^{\otimes n}$$
+
+- **층당 파라미터 수**: $|E|$개($R_{ZZ}$) + $n$개($R_Z$) + $n$개($R_X$) → **3x3($p=3$)은 총 114개**, **5x5($p=3$)는 총 366개**
+- **PADO 증류**: LWPP 사전학습 후 $|\theta_k| \le 0.3$인 회전 게이트($R_{ZZ}, R_Z, R_X$)는 항등 연산($I$)에 가까우므로 회로에서 통째로 제거하고, 살아남은 $N_{\text{act}}$개 게이트만으로 미세조정한다.
+
 | | TC1 | TC2 | TC3 |
 |---|---|---|---|
 | 문제 | 5x5 격자(25큐비트), 인스턴스 5개 | 3x3 격자(9큐비트), 인스턴스 5개 | 3x3 격자, 인스턴스 0 |
@@ -76,12 +104,54 @@ results_on_<장치>/extras/   참고 실험 결과 (코드 폴더와 같은 이�
 - `results_on_<backend>/TC3/<문제>/{standard,pado_safe}/params.json`: step별 측정 에너지·표준오차·AR, 같은 θ의 노이즈 없는 AR, 기울기, job id, IBM 사용 시간(usage)과 시각. `backend.json`(기기, 캘리브레이션 일자, rep_delay, 큐비트 배치, ISA 회로의 2큐비트 게이트 수·깊이). `pado_safe/pre_distill.json`(증류 전 측정 1회, 집계 제외). 시작점은 `results_on_<GPU>/TC3/<문제>/start_points/`.
 - `metrics/` (metric.py): `pairs.csv`(TC1·TC2 쌍별 AR·τ·C·R·D·환산 shots), `steps.csv`(TC3 step별), `criteria.json`(값, 임계값, PASS/FAIL, 전체 판정, 실행 상태), `energy_curves*.png`, `summary_ar.png`.
 
-## 지표 (metric.py, 시험합의서의 산정식)
+## 지표와 판정 기준 (시험합의서 2.4 라, 시험규격서)
 
-- AR = (E_max − E)/(E_max − E_min). E_min·E_max는 전수 조사. AR(T)는 exact step T(갱신 T회 뒤)에서의 값, T = 0은 시작점.
-- ΔAR(20) = AR_PADO(20) − AR_std(20). 잔존 비율 D = N_act / N.
-- 목표 품질 A* = AR_PADO(20). τ(A) = AR ≥ A에 처음 닿는 step(상한 안에 못 닿으면 미도달). C = τ × (2N+1) + 1. 회로 절감률 R = 1 − C_PADO / C_std. τ_std(A_0)은 standard가 PADO의 시작 AR에 닿는 step.
-- TC3: 같은 기기에서 잰 AR^Q, 실제 회로 수와 shots, R_C = C_PADO(3) / C_std(12), 노이즈 격차 G = |AR^Q − AR^noiseless|(기록).
-- 판정 기준은 `configs/<TC>.json`의 `criteria`다. 키 끝의 `gt`/`ge`/`le`가 비교 방향이고, 결과는 `criteria.json`의 `checks`에 값과 함께 남는다.
+`metric.py`가 `configs/<TC>.json`의 산정식·`criteria`대로 계산해 `metrics/pairs.csv`(TC1·TC2 쌍별), `metrics/steps.csv`(TC3 step별), `metrics/criteria.json`(판정)에 쓴다. 모든 AR은 exact 평가로 계산하며 LWPP 대리 모델의 에너지는 지표에 쓰지 않는다.
+
+### 측정 지표 (TC1·TC2, 쌍마다)
+
+| 지표 | 정의 | 의미 | `pairs.csv` 열 |
+|---|---|---|---|
+| AR(T) | (E_max − E)/(E_max − E_min). E는 exact step T의 에너지(T = 0은 시작점), E_min·E_max는 전수 조사 | 해의 품질 (1 = 최적) | `AR_std_0`, `AR_std_20`, `AR_pado_0`, `AR_pado_20` |
+| N, N_act | 전체 각도 수(5x5: 366, 3x3: 114), 증류 후 남은 각도 수 | 회로 크기 | `N`, `N_act` |
+| D | N_act / N | 잔존 비율 (step당 회로 수 비율) | `D` |
+| ΔAR(20) | AR_PADO(20) − AR_std(20) | 같은 exact step 예산에서의 품질 이득 | `delta_AR20` |
+| A*, A_0 | A* = AR_PADO(20), A_0 = AR_PADO(0) (쌍마다 정함) | 목표 품질, 시작점 품질 | = `AR_pado_20`, `AR_pado_0` |
+| τ(A) | AR ≥ A에 처음 도달하는 exact step 수. standard는 상한 T_max(TC1 500, TC2 2000) 안에 못 닿으면 미도달 | 목표 품질에 드는 비용 | `tau_pado_Astar`, `tau_std_Astar`, `tau_std_A0`, `reached` |
+| C(T), S(T) | C(T) = T × (2·N_act + 1) + 1 (standard는 2·N + 1), S(T) = C(T) × 1024 | step T까지의 누적 회로 수, 환산 shots | `C_pado`, `C_std`, `shots_pado_1024`, `shots_std_1024` |
+| R | 1 − C_PADO(τ_PADO(A*)) / C_std(τ_std(A*)). 미도달 쌍은 제외 | 같은 품질까지의 회로 절감률 | `R` |
+| 고전 비용 | LWPP compile 시간, 사전학습 시간, GPU peak memory | 절감의 대가로 쓴 고전 자원 (기록) | `lwpp_compile_s`, `lwpp_train_s`, `lwpp_peak_gb` |
+| Status | 실행의 정상 완료 여부 | 실행 가능성 | `status_standard`, `status_pado_safe`, `status_standard_long` |
+
+### 측정 지표 (TC3, backend마다)
+
+| 지표 | 정의 | 의미 | `steps.csv` / `criteria.json` 열 |
+|---|---|---|---|
+| AR^Q(T) | step T의 파라미터로 기기에서 측정한 에너지(회로당 `qpu.shots`)로 계산한 AR | 기기에서 잰 해의 품질 | `AR` / `AR_pado_0`, `AR_pado_last`, `AR_std_0`, `AR_std_last` |
+| AR^noiseless(T) | 같은 θ의 상태벡터 AR | 노이즈 없는 기준 | `AR_noiseless` |
+| G(T) | abs(AR^Q(T) − AR^noiseless(T)) | 노이즈 격차 (기록, 판정 대상 아님) | `G` / `G_max_pado`, `G_max_std` |
+| C_PADO, C_std | 실제 제출한 회로 수 = T × (2·N_act + 1) + 1. 증류 전 측정 1회는 제외 | 실측 양자 자원 | `n_circuits` / `C_pado`, `C_std`, `shots_pado`, `shots_std` |
+| R_C | C_PADO / C_std | 회로 비율 | `R_C` |
+| 기록 | 기기명, 캘리브레이션 일자, 큐비트 배치, job id, usage | 실행 조건 | `backend.json`, `job_id`, `usage_s` |
+
+### 판정 기준 (`configs/<TC>.json`의 `criteria`, 결과는 `criteria.json`의 `checks`)
+
+| TC | # | 판정 기준 | `criteria` 키 | 기준 |
+|---|---|---|---|---|
+| TC1 | 1 | 25쌍 모두 ΔAR(20) > 0 | `delta_ar20_min` | > 0 |
+| TC1 | 2 | ΔAR(20)의 중앙값 ≥ 0.10 | `delta_ar20_median` | ≥ 0.10 |
+| TC1 | 3 | AR_PADO(0) ≥ AR_std(20)인 쌍이 20쌍 이상 | `n_pairs_pado_start_ge_std_last` | ≥ 20 |
+| TC1 | 4 | 25쌍 모두 D ≤ 0.7 | `D_max` | ≤ 0.7 |
+| TC1 | 5 | standard가 T_max = 500 안에 A*에 도달한 쌍이 15쌍 이상 | `n_reached` | ≥ 15 |
+| TC1 | 6 | 도달한 쌍의 R 중앙값 ≥ 0.80, 최솟값 ≥ 0.60 | `R_median`, `R_min` | ≥ 0.80, ≥ 0.60 |
+| TC2 | 1 | 25쌍 모두 ΔAR(20) > 0 | `delta_ar20_min` | > 0 |
+| TC2 | 2 | standard가 T_max = 2000 안에 A*에 도달한 쌍이 20쌍 이상 | `n_reached` | ≥ 20 |
+| TC2 | 3 | 도달한 쌍의 R 중앙값 ≥ 0.80, 최솟값 ≥ 0.60 | `R_median`, `R_min` | ≥ 0.80, ≥ 0.60 |
+| TC2 | 4 | 25쌍 모두 τ_std(A_0) ≥ 20 | `tau_std_A0_min` | ≥ 20 |
+| TC3 | 1 | AR^Q_PADO(T_PADO) ≥ AR^Q_std(T_std) | `AR_pado_last_minus_AR_std_last` | ≥ 0 |
+| TC3 | 2 | R_C ≤ 0.20 | `R_C` | ≤ 0.20 |
+| TC3 | 3 | AR^Q_PADO(0) ≥ AR^Q_std(T_std) | `AR_pado_0_minus_AR_std_last` | ≥ 0 |
+
+TC3는 backend(FakeNighthawk, IBM 실기기)마다 따로 판정하며, T_PADO·T_std는 `qpu.steps`(현재 3, 12)다. `criteria` 키 끝의 `_gt`/`_ge`/`_le`가 비교 방향이고, `metric.py`는 기준마다 값·임계값·PASS/FAIL을 출력한다. TC마다 모든 기준을 만족하면 전체 PASS.
 
 참고: PennyLane의 torch 인터페이스는 결과를 torch 기본 dtype으로 돌려주므로 스크립트 첫머리에서 `torch.set_default_dtype(torch.float64)`로 설정한다. 이 설정이 없으면 exact 에너지가 float32로 반올림된다.
