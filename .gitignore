@@ -1,5 +1,5 @@
 *.hwpx
 __pycache__/
 CLAUDE.md
-docs_private/
 results_on_*/
+!results_on_P300C/

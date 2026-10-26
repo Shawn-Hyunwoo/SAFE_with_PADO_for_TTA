@@ -10,7 +10,7 @@ import numpy as np
 import pennylane as qml
 import torch
 
-from common import REPO, device_tag, env_info, new_run_dir, save_json, save_qasm
+from common import REPO, device_tag, env_info, new_run_dir, save_json
 
 cfg = json.loads(Path(sys.argv[sys.argv.index("--config") + 1]).read_text())
 inst = int(sys.argv[sys.argv.index("--inst") + 1])
@@ -45,7 +45,7 @@ save_json(out / "circuit.json", {
     "gates": gates, "edges": prob["edges"], "fields": prob["fields"],
 })
 
-# ---- exact 에너지: PennyLane 상태벡터(GPU), adjoint 미분
+# ---- exact 에너지: PennyLane 상태벡터(CPU), adjoint 미분
 H = qml.Hamiltonian([w for _, _, w in prob["edges"]] + [h for _, h in prob["fields"]],
                     [qml.Z(u) @ qml.Z(v) for u, v, _ in prob["edges"]] + [qml.Z(q) for q, _ in prob["fields"]])
 dev = qml.device(EXACT_DEVICE, wires=n)
@@ -95,8 +95,6 @@ for c in CONSTS:
         "theta_init": theta_init.tolist(), "theta_final": theta.detach().tolist(),
         "energy": energies, "ar": ar, "wall_s": wall_s,
     })
-    save_qasm(out / "qasm" / f"standard_long_c{c}_init.qasm", n, gates, theta_init)
-    save_qasm(out / "qasm" / f"standard_long_c{c}_final.qasm", n, gates, theta.detach().tolist())
 
 # ---- 저장
 save_json(out / "params.json", {

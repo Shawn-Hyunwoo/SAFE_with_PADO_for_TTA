@@ -1,6 +1,6 @@
-# PADO 방식: 같은 상수 초기값 → PADO-Pauli LWPP 대리 모델로 사전학습(고전 GPU) → 파라미터 증류 → exact(상태벡터) 미세조정.
+# PADO 방식: 같은 상수 초기값 → PADO-Pauli LWPP 대리 모델로 사전학습(NPU) → 파라미터 증류 → exact(상태벡터) 미세조정.
 # 양자 자원(환산 회로 수)은 마지막 단계에서만 든다. 초기값 c마다 따로 저장한다.
-# Usage: python classical/pado_safe.py --config configs/TC1.json --inst 0
+# Usage: python <repo>/classical/pado_safe.py --config <repo>/configs/TC1.json --inst 0   (Pado-Lab-TT env.sh를 source 한 셸, cwd = tt-metal)
 import json
 import sys
 import time
@@ -9,12 +9,9 @@ from pathlib import Path
 import numpy as np
 import pennylane as qml
 import torch
-try:
-    from hipauli import CliffordGate, PauliRotation, PauliSum, compile_program
-except ImportError:
-    from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
+from padopauli import CliffordGate, PauliRotation, PauliSum, compile_program
 
-from common import REPO, env_info, new_run_dir, save_json, save_qasm
+from common import REPO, env_info, new_run_dir, npu_dram_gb, peak_rss_gb, reset_peak_rss, save_json
 
 cfg = json.loads(Path(sys.argv[sys.argv.index("--config") + 1]).read_text())
 inst = int(sys.argv[sys.argv.index("--inst") + 1])
@@ -50,7 +47,7 @@ for i, c in enumerate(CONSTS):
         theta_init[i, g["param"]] = -c if g["gate"] == "RX" else c
 
 # ---- 1/3 사전학습: PADO LWPP 대리 모델 (한 번 compile, 초기값 5종을 배치로 동시에 학습)
-print(f"{tag} 1/3 LWPP 사전학습: max_weight {MAX_WEIGHT}, {LWPP_STEPS} step, {LWPP_DTYPE} (고전 GPU, 양자 자원 0)", flush=True)
+print(f"{tag} 1/3 LWPP 사전학습: max_weight {MAX_WEIGHT}, {LWPP_STEPS} step, {LWPP_DTYPE} (NPU, 양자 자원 0)", flush=True)
 pado_circuit = []
 for g in gates:
     if g["gate"] == "H":
@@ -63,19 +60,19 @@ for u, v, w in prob["edges"]:
 for q, h in prob["fields"]:
     obs.add_from_str("Z", h, qubits=[q])
 
-torch.cuda.reset_peak_memory_stats()
+reset_peak_rss()
 t0 = time.perf_counter()
 program = compile_program(circuit=pado_circuit, observables=[obs], preset=LWPP_PRESET,
                           preset_overrides={"max_weight": MAX_WEIGHT, "dtype": LWPP_DTYPE})
 compile_s = time.perf_counter() - t0
-compile_peak_gb = torch.cuda.max_memory_allocated() / 1e9
+compile_peak_rss_gb, compile_dram_gb = peak_rss_gb(), npu_dram_gb(program.tt_device)
 n_terms = int(program.psum_union.x_mask.shape[0])  # compile 뒤 남은 Pauli 항 수 (zero-filter 이후)
-print(f"{tag} compile {compile_s:.1f}s  terms={n_terms}  peak={compile_peak_gb:.2f} GB", flush=True)
+print(f"{tag} compile {compile_s:.1f}s  terms={n_terms}  host peak RSS={compile_peak_rss_gb:.2f} GB  NPU DRAM={compile_dram_gb:.3f} GB", flush=True)
 
-thetas = torch.tensor(theta_init, device="cuda", requires_grad=True)
+thetas = torch.tensor(theta_init, requires_grad=True)  # 호스트 텐서. NPU 경로가 float32로 바꿔 장치에 올린다
 opt = torch.optim.Adam([thetas], lr=LR)
 lwpp_energy = []
-torch.cuda.reset_peak_memory_stats()
+reset_peak_rss()
 t0 = time.perf_counter()
 for step in range(LWPP_STEPS):
     e = program.expvals(thetas, diff_mode="vjp")[:, 0]
@@ -85,14 +82,13 @@ for step in range(LWPP_STEPS):
     lwpp_energy.append(e.detach().cpu().tolist())
     if step % 20 == 0 or step == LWPP_STEPS - 1:
         print(f"{tag} lwpp step {step:4d}  E_lwpp={[round(x, 4) for x in lwpp_energy[-1]]}", flush=True)
-torch.cuda.synchronize()
 lwpp_train_s = time.perf_counter() - t0
-lwpp_train_peak_gb = torch.cuda.max_memory_allocated() / 1e9
-theta_lwpp = thetas.detach().cpu().numpy()
-lwpp_energy_final = program.expvals(torch.tensor(theta_lwpp, device="cuda"))[:, 0].cpu().tolist()
-print(f"{tag} 사전학습 끝 {lwpp_train_s:.1f}s  peak={lwpp_train_peak_gb:.2f} GB", flush=True)
+lwpp_train_peak_rss_gb, lwpp_train_dram_gb = peak_rss_gb(), npu_dram_gb(program.tt_device)
+theta_lwpp = thetas.detach().numpy()
+lwpp_energy_final = program.expvals(torch.tensor(theta_lwpp))[:, 0].tolist()
+print(f"{tag} 사전학습 끝 {lwpp_train_s:.1f}s  host peak RSS={lwpp_train_peak_rss_gb:.2f} GB  NPU DRAM={lwpp_train_dram_gb:.3f} GB", flush=True)
 
-# ---- exact 에너지: 아무 게이트 목록(증류된 회로 포함)에 대해 PennyLane 상태벡터(GPU), adjoint 미분
+# ---- exact 에너지: 아무 게이트 목록(증류된 회로 포함)에 대해 PennyLane 상태벡터(CPU), adjoint 미분
 H = qml.Hamiltonian([w for _, _, w in prob["edges"]] + [h for _, h in prob["fields"]],
                     [qml.Z(u) @ qml.Z(v) for u, v, _ in prob["edges"]] + [qml.Z(q) for q, _ in prob["fields"]])
 dev = qml.device(EXACT_DEVICE, wires=n)
@@ -156,9 +152,6 @@ for i, c in enumerate(CONSTS):
         "energy": energies, "ar": [(e_max - x) / (e_max - e_min) for x in energies],
         "theta_traj_active": traj, "step_wall_s": step_s,
     })
-    save_qasm(out / "qasm" / f"pado_safe_c{c}_init.qasm", n, gates, theta_init[i])
-    save_qasm(out / "qasm" / f"pado_safe_c{c}_exact_start.qasm", n, pruned, traj[0])
-    save_qasm(out / "qasm" / f"pado_safe_c{c}_final.qasm", n, pruned, traj[-1])
 
 # ---- 저장
 save_json(out / "circuit.json", {
@@ -173,8 +166,10 @@ save_json(out / "params.json", {
                "lwpp_preset": LWPP_PRESET, "lwpp_dtype": LWPP_DTYPE, "threshold": THRESHOLD,
                "exact_steps": EXACT_STEPS, "lr": LR, "exact_device": EXACT_DEVICE, "diff_method": "adjoint"},
     "versions": env_info(),
-    "lwpp": {"compile_s": compile_s, "compile_peak_gb": compile_peak_gb, "n_terms": n_terms,
-             "train_s": lwpp_train_s, "train_peak_gb": lwpp_train_peak_gb},
+    "lwpp": {"compile_s": compile_s, "compile_peak_rss_gb": compile_peak_rss_gb, "compile_dram_gb": compile_dram_gb,
+             "n_terms": n_terms, "train_s": lwpp_train_s, "train_peak_rss_gb": lwpp_train_peak_rss_gb,
+             "train_dram_gb": lwpp_train_dram_gb,
+             "memory": "peak_rss_gb: host VmHWM since the phase start; dram_gb: ttnn DRAM allocated at the phase end (not a peak)"},
     "inits": runs,
 })
 print(f"{tag} 끝: AR(0) → AR({EXACT_STEPS}) = " + ", ".join(f"{r['ar'][0]:.3f}→{r['ar'][-1]:.3f}" for r in runs)

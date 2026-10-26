@@ -1,7 +1,6 @@
 {
   "name": "TC1_smoke",
   "title": "코드 점검용 (3x3 인스턴스 1개, 짧은 step). 결과는 덮어써도 된다",
-  "kind": "classical",
   "grid": "grid3x3",
   "instances": [0],
   "seed_base": 120490,
@@ -9,8 +8,8 @@
   "p_layers": 3,
   "lr": 0.02,
   "exact_steps": 2,
-  "exact_device": "lightning.amdgpu",
-  "lwpp": {"steps": 60, "max_weight": 3, "preset": "gpu", "dtype": "float32"},
+  "exact_device": "lightning.qubit",
+  "lwpp": {"steps": 60, "max_weight": 3, "preset": "tenstorrent", "dtype": "float32"},
   "distill_threshold": 0.3,
   "run_standard_long": true,
   "standard_long_max_steps": 300,

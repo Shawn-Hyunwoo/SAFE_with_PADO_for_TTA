@@ -1,7 +1,6 @@
 {
   "name": "TC2",
   "title": "3x3 격자 고전 시뮬레이션 : 같은 품질까지의 양자 자원 테스트 (PADO vs standard)",
-  "kind": "classical",
   "grid": "grid3x3",
   "instances": [0, 1, 2, 3, 4],
   "seed_base": 120490,
@@ -9,8 +8,8 @@
   "p_layers": 3,
   "lr": 0.02,
   "exact_steps": 20,
-  "exact_device": "lightning.amdgpu",
-  "lwpp": {"steps": 100, "max_weight": 3, "preset": "gpu", "dtype": "float32"},
+  "exact_device": "lightning.qubit",
+  "lwpp": {"steps": 100, "max_weight": 3, "preset": "tenstorrent", "dtype": "float32"},
   "distill_threshold": 0.3,
   "run_standard_long": true,
   "standard_long_max_steps": 2000,
