@@ -6,8 +6,8 @@
     "n_pairs": 25,
     "T": 20,
     "T_max": 500,
-    "delta_ar20_min": 0.11183607419235753,
-    "delta_ar20_median": 0.17426193021850356,
+    "delta_ar20_min": 0.11183607419235675,
+    "delta_ar20_median": 0.17426193021850345,
     "n_pairs_pado_start_ge_std_last": 24,
     "D_max": 0.5765765765765766,
     "n_long_pairs": 25,
@@ -19,13 +19,13 @@
   },
   "checks": {
     "delta_ar20_min_gt": {
-      "value": 0.11183607419235753,
+      "value": 0.11183607419235675,
       "op": ">",
       "threshold": 0.0,
       "pass": true
     },
     "delta_ar20_median_ge": {
-      "value": 0.17426193021850356,
+      "value": 0.17426193021850345,
       "op": ">=",
       "threshold": 0.1,
       "pass": true
