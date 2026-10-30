@@ -1,6 +1,6 @@
 # 시험 지표 계산기: configs/<TC>.json의 산정식·판정 기준대로 원시 결과(results_on_*/<TC>/)를 읽어
 # 결과 폴더 안 metrics/ 에 표(csv), 판정(criteria.json), 그림을 쓴다. 원시 결과는 바꾸지 않는다.
-# Usage: python metric.py --exp TC1 [--tag <TAG>]      (TC1, TC2: results_on_<TAG>/<TC>/)
+# Usage: python metric.py --exp TC1 [--tag <TAG>]      (TC1, TC2, TC3: results_on_<TAG>/<TC>/)
 import csv
 import json
 import sys
@@ -46,7 +46,7 @@ def show(checks):
         print(f"  {'PASS' if c['pass'] else ('----' if c['pass'] is None else 'FAIL'):4s}  {key:36s} 값 {v:>10s}  기준: 값 {c['op']} {c['threshold']}")
 
 
-# ============================================================ TC1, TC2 (고전 시뮬레이션)
+# ============================================================ TC1, TC2, TC3 (고전 시뮬레이션)
 root = REPO / f"results_on_{tag}" / cfg["name"]
 T, T_max, SHOTS = cfg["exact_steps"], cfg["standard_long_max_steps"], cfg["shots_per_circuit"]
 out = root / "metrics"

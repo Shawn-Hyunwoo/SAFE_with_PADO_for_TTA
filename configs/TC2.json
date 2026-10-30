@@ -1,7 +1,7 @@
 {
   "name": "TC2",
-  "title": "3x3 격자 고전 시뮬레이션 : 같은 품질까지의 양자 자원 테스트 (PADO vs standard)",
-  "grid": "grid3x3",
+  "title": "4x4 격자 고전 시뮬레이션 : 품질 이득 및 양자 자원 절감 테스트 (PADO vs standard)",
+  "grid": "grid4x4",
   "instances": [0, 1, 2, 3, 4],
   "seed_base": 120490,
   "consts": [0.01, 0.05, 0.1, 0.2, 0.4],
@@ -9,16 +9,18 @@
   "lr": 0.02,
   "exact_steps": 20,
   "exact_device": "lightning.qubit",
-  "lwpp": {"steps": 100, "max_weight": 3, "preset": "tenstorrent", "dtype": "float32"},
+  "lwpp": {"steps": 200, "max_weight": 5, "preset": "tenstorrent", "dtype": "float32"},
   "distill_threshold": 0.3,
   "run_standard_long": true,
-  "standard_long_max_steps": 2000,
+  "standard_long_max_steps": 500,
   "shots_per_circuit": 1024,
   "criteria": {
     "delta_ar20_min_gt": 0.0,
-    "n_reached_ge": 20,
+    "delta_ar20_median_ge": 0.10,
+    "n_pairs_pado_start_ge_std_last_ge": 20,
+    "D_max_le": 0.7,
+    "n_reached_ge": 15,
     "R_median_ge": 0.80,
-    "R_min_ge": 0.60,
-    "tau_std_A0_min_ge": 20
+    "R_min_ge": 0.60
   }
 }

@@ -1,5 +1,5 @@
 # 시험 실행기: configs/<TC>.json 하나로 그 시험의 모든 단계를 순서대로 돌린다. 지표는 metric.py가 계산한다.
-# Usage: source <Pado-Lab-TT>/env.sh && python <repo>/run.py --exp TC1        (TC1, TC2, TC1_smoke)
+# Usage: source <Pado-Lab-TT>/env.sh && python <repo>/run.py --exp TC1        (TC1, TC2, TC3)
 # env.sh가 cwd를 tt-metal로 옮긴다. NPU를 여는 하위 스크립트는 그 폴더에서 돌아야 한다 (tt-metal 커널 소스가 상대경로)
 import json
 import os

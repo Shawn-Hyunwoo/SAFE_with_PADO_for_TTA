@@ -1,7 +1,7 @@
 {
   "name": "TC1",
-  "title": "4x4 격자 고전 시뮬레이션 : 품질 이득 및 양자 자원 절감 테스트 (PADO vs standard)",
-  "grid": "grid4x4",
+  "title": "4x5 격자 고전 시뮬레이션 : 품질 이득 및 양자 자원 절감 테스트 (PADO vs standard)",
+  "grid": "grid4x5",
   "instances": [0, 1, 2, 3, 4],
   "seed_base": 120490,
   "consts": [0.01, 0.05, 0.1, 0.2, 0.4],

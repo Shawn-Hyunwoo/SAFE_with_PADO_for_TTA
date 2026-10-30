@@ -1,0 +1,1838 @@
+===== TC3: 3x3 격자 고전 시뮬레이션 : 같은 품질까지의 양자 자원 테스트 (PADO vs standard)
+
+===== [TC3] 환경 기록 → results_on_P300C/TC3/env.txt
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+{"python": "3.12.15", "torch": "2.11.0+cpu", "padopauli": "2.2.2", "padopauli_commit": "25e602b", "padopauli_tt": "3.0.0.dev0", "padopauli_tt_commit": "acc93d0", "ttnn": "0.75.0rc10.dev3+g0ee13743957.d20261014", "pennylane": "0.44.1", "npu": ["p300c", "p300c", "p300c", "p300c"]}
+
+===== [TC3] 문제 파일 확인: problems/make_problems.py --grid grid3x3 재실행 (수 초)
+grid3x3_inst0_seed120490: 20 edges, E_min=-8.656307 (1 ground states), E_max=9.354969
+grid3x3_inst1_seed120491: 20 edges, E_min=-11.294979 (1 ground states), E_max=9.584621
+grid3x3_inst2_seed120492: 20 edges, E_min=-6.394998 (1 ground states), E_max=7.986416
+grid3x3_inst3_seed120493: 20 edges, E_min=-11.296443 (1 ground states), E_max=8.439314
+grid3x3_inst4_seed120494: 20 edges, E_min=-8.176497 (1 ground states), E_max=8.049614
+
+===== [TC3] PADO-Pauli vs PennyLane 일치 검사 (3x3, 호스트 float64 차이 1e-8 이내여야 PASS, NPU float32 차이는 출력만)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+2026-10-30 11:11:41.734 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:11:41.769 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:11:41.769 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:11:41.769 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:11:41.769 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:11:41.782 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:11:41.783 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:11:41.797 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:11:41.797 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:11:41.797 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:11:41.797 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:11:41.798 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:11:42.014 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:11:42.108 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:11:42.108 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:42.108 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:11:42.108 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:11:42.117 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:42.117 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:42.117 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:42.117 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:42.150 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+theta 0: E_pado=-0.4105815754 E_pl=-0.4105815754 |dE|=2.78e-16 max|dgrad|=6.66e-16  | NPU E=-0.4105814397 |dE|=1.36e-07 max|dgrad|=3.05e-07
+theta 1: E_pado=-0.5426122018 E_pl=-0.5426122018 |dE|=1.22e-15 max|dgrad|=1.22e-15  | NPU E=-0.5426123142 |dE|=1.12e-07 max|dgrad|=2.22e-07
+theta 2: E_pado=-0.1084729808 E_pl=-0.1084729808 |dE|=4.58e-16 max|dgrad|=9.99e-16  | NPU E=-0.1084729731 |dE|=7.71e-09 max|dgrad|=2.68e-07
+theta 3: E_pado=-0.3048799453 E_pl=-0.3048799453 |dE|=2.22e-16 max|dgrad|=1.89e-15  | NPU E=-0.3048799932 |dE|=4.79e-08 max|dgrad|=1.88e-07
+NPU float32 (not judged): worst |dE|=1.36e-07, worst |dgrad|=3.05e-07
+114 params, host float64: worst |dE|=1.22e-15, worst |dgrad|=1.89e-15
+PASS
+nanobind: leaked 1 instances!
+ - leaked instance 0x753a0167d368 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 42 types!
+ - leaked type "DispatchCoreAxis"
+ - leaked type "ttnn._ttnn.device.SubDeviceManagerId"
+ - leaked type "MathFidelity"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.types.Shape"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "BufferType"
+ - leaked type "UnaryOpType"
+ - leaked type "Layout"
+ - ... skipped remainder
+nanobind: leaked 347 functions!
+ - leaked function "pop_current_command_queue_id_for_thread"
+ - leaked function ""
+ - leaked function "sharded_across_dims"
+ - leaked function "is_sharded"
+ - leaked function "get_fabric_node_id"
+ - leaked function "to_json"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "compute_program_hash"
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:11:44.416 | info     |    BuildKernels | JIT cache stats: 286/286 hits (100.0%) [286 cached, 102 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:11:44.416 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:11:44.431 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:11:44.431 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:11:44.926 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:11:44.926 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:11:44.926 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+
+===== [TC3] grid3x3_inst0_seed120490 / standard
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst0_seed120490 standard] 시작: 초기값 5종 × exact 20 step (lightning.qubit, adjoint 미분)
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   0  E=-0.001910  AR=0.5195  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   1  E=-0.057533  AR=0.5226  0.02s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   2  E=-0.173630  AR=0.5290  0.02s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   3  E=-0.356776  AR=0.5392  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   4  E=-0.604820  AR=0.5530  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   5  E=-0.913357  AR=0.5701  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   6  E=-1.271755  AR=0.5900  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   7  E=-1.668476  AR=0.6120  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   8  E=-2.091051  AR=0.6355  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step   9  E=-2.526198  AR=0.6597  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  10  E=-2.961929  AR=0.6838  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  11  E=-3.387285  AR=0.7075  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  12  E=-3.792501  AR=0.7300  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  13  E=-4.169901  AR=0.7509  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  14  E=-4.513999  AR=0.7700  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  15  E=-4.821311  AR=0.7871  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  16  E=-5.090355  AR=0.8020  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  17  E=-5.320925  AR=0.8148  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  18  E=-5.513172  AR=0.8255  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  19  E=-5.668163  AR=0.8341  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.01  step  20  E=-5.788710  AR=0.8408  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   0  E=-0.047045  AR=0.5220  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   1  E=-0.253130  AR=0.5334  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   2  E=-0.494953  AR=0.5469  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   3  E=-0.778967  AR=0.5626  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   4  E=-1.109675  AR=0.5810  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   5  E=-1.481068  AR=0.6016  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   6  E=-1.880809  AR=0.6238  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   7  E=-2.294729  AR=0.6468  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   8  E=-2.711196  AR=0.6699  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step   9  E=-3.120003  AR=0.6926  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  10  E=-3.512331  AR=0.7144  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  11  E=-3.881938  AR=0.7349  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  12  E=-4.224863  AR=0.7540  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  13  E=-4.538020  AR=0.7713  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  14  E=-4.818486  AR=0.7869  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  15  E=-5.063708  AR=0.8005  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  16  E=-5.272120  AR=0.8121  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  17  E=-5.443843  AR=0.8216  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  18  E=-5.581212  AR=0.8293  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  19  E=-5.689144  AR=0.8353  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.05  step  20  E=-5.774859  AR=0.8400  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   0  E=-0.174762  AR=0.5291  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   1  E=-0.499133  AR=0.5471  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   2  E=-0.855907  AR=0.5669  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   3  E=-1.236445  AR=0.5880  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   4  E=-1.636713  AR=0.6103  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   5  E=-2.049478  AR=0.6332  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   6  E=-2.464825  AR=0.6562  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   7  E=-2.871817  AR=0.6788  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   8  E=-3.259762  AR=0.7004  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step   9  E=-3.621204  AR=0.7204  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  10  E=-3.952470  AR=0.7388  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  11  E=-4.252149  AR=0.7555  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  12  E=-4.520416  AR=0.7704  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  13  E=-4.758630  AR=0.7836  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  14  E=-4.968457  AR=0.7952  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  15  E=-5.151526  AR=0.8054  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  16  E=-5.309810  AR=0.8142  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  17  E=-5.446096  AR=0.8218  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  18  E=-5.564179  AR=0.8283  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  19  E=-5.668610  AR=0.8341  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.1  step  20  E=-5.763913  AR=0.8394  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   0  E=-0.451004  AR=0.5444  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   1  E=-0.799871  AR=0.5638  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   2  E=-1.180421  AR=0.5849  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   3  E=-1.587231  AR=0.6075  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   4  E=-2.012958  AR=0.6312  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   5  E=-2.448131  AR=0.6553  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   6  E=-2.880663  AR=0.6793  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   7  E=-3.297561  AR=0.7025  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   8  E=-3.687250  AR=0.7241  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step   9  E=-4.044143  AR=0.7439  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  10  E=-4.369462  AR=0.7620  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  11  E=-4.666290  AR=0.7785  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  12  E=-4.935263  AR=0.7934  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  13  E=-5.174344  AR=0.8067  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  14  E=-5.380811  AR=0.8181  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  15  E=-5.553261  AR=0.8277  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  16  E=-5.692739  AR=0.8355  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  17  E=-5.802899  AR=0.8416  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  18  E=-5.889423  AR=0.8464  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  19  E=-5.959152  AR=0.8503  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.2  step  20  E=-6.019036  AR=0.8536  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   0  E=-0.195507  AR=0.5302  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   1  E=-0.598633  AR=0.5526  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   2  E=-1.007748  AR=0.5753  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   3  E=-1.414129  AR=0.5979  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   4  E=-1.811445  AR=0.6200  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   5  E=-2.193193  AR=0.6412  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   6  E=-2.554135  AR=0.6612  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   7  E=-2.893373  AR=0.6800  0.01s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   8  E=-3.213866  AR=0.6978  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step   9  E=-3.519747  AR=0.7148  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  10  E=-3.813539  AR=0.7311  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  11  E=-4.095152  AR=0.7468  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  12  E=-4.361967  AR=0.7616  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  13  E=-4.609782  AR=0.7753  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  14  E=-4.834190  AR=0.7878  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  15  E=-5.031697  AR=0.7988  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  16  E=-5.200399  AR=0.8081  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  17  E=-5.340256  AR=0.8159  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  18  E=-5.453055  AR=0.8222  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  19  E=-5.542214  AR=0.8271  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] c=0.4  step  20  E=-5.612450  AR=0.8310  0.00s
+[TC3 grid3x3_inst0_seed120490 standard] 끝: AR(0) → AR(20) = 0.520→0.841, 0.522→0.840, 0.529→0.839, 0.544→0.854, 0.530→0.831  저장 results_on_P300C/TC3/grid3x3_inst0_seed120490/standard
+      (3초)
+
+===== [TC3] grid3x3_inst0_seed120490 / pado_safe
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst0_seed120490 pado_safe] 1/3 LWPP 사전학습: max_weight 3, 100 step, float32 (NPU, 양자 자원 0)
+2026-10-30 11:11:49.614 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:11:49.650 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:11:49.650 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:11:49.650 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:11:49.650 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:11:49.664 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:11:49.664 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:11:49.673 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:11:49.673 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:11:49.673 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:11:49.673 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:11:49.674 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:11:49.915 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:11:50.005 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:11:50.005 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:11:50.005 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:11:50.005 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:11:50.014 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:50.014 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:50.014 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:50.014 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:11:50.049 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+[TC3 grid3x3_inst0_seed120490 pado_safe] compile 1.2s  terms=120  host peak RSS=0.58 GB  NPU DRAM=0.000 GB
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step    0  E_lwpp=[-0.0019, -0.0471, -0.1773, -0.4729, -0.3998]
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step   20  E_lwpp=[-6.0103, -5.9869, -5.9732, -6.2958, -5.4385]
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step   40  E_lwpp=[-6.9871, -6.8434, -6.8151, -7.3667, -7.6666]
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step   60  E_lwpp=[-8.4908, -8.4017, -8.2926, -8.9318, -9.1674]
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step   80  E_lwpp=[-9.1145, -9.01, -9.2471, -9.953, -9.608]
+[TC3 grid3x3_inst0_seed120490 pado_safe] lwpp step   99  E_lwpp=[-9.7195, -9.4582, -10.3274, -10.802, -10.2985]
+[TC3 grid3x3_inst0_seed120490 pado_safe] 사전학습 끝 0.6s  host peak RSS=0.69 GB  NPU DRAM=0.034 GB
+[TC3 grid3x3_inst0_seed120490 pado_safe] 2/3 증류 c=0.01: |θ| <= 0.3 제거 → 남은 각도 53/114
+[TC3 grid3x3_inst0_seed120490 pado_safe] 3/3 exact 미세조정 c=0.01: 20 step (step당 환산 회로 107개)
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   0  E=-7.941141  AR=0.9603  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   1  E=-8.115601  AR=0.9700  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   2  E=-8.206542  AR=0.9750  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   3  E=-8.248296  AR=0.9773  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   4  E=-8.270004  AR=0.9786  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   5  E=-8.286512  AR=0.9795  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   6  E=-8.304421  AR=0.9805  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   7  E=-8.323740  AR=0.9815  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   8  E=-8.342299  AR=0.9826  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step   9  E=-8.358717  AR=0.9835  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  10  E=-8.372292  AR=0.9842  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  11  E=-8.382289  AR=0.9848  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  12  E=-8.388269  AR=0.9851  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  13  E=-8.390773  AR=0.9853  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  14  E=-8.391394  AR=0.9853  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  15  E=-8.392120  AR=0.9853  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  16  E=-8.394453  AR=0.9855  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  17  E=-8.398837  AR=0.9857  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  18  E=-8.404581  AR=0.9860  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  19  E=-8.410284  AR=0.9863  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.01  step  20  E=-8.414544  AR=0.9866  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] 2/3 증류 c=0.05: |θ| <= 0.3 제거 → 남은 각도 53/114
+[TC3 grid3x3_inst0_seed120490 pado_safe] 3/3 exact 미세조정 c=0.05: 20 step (step당 환산 회로 107개)
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   0  E=-7.884522  AR=0.9571  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   1  E=-8.056773  AR=0.9667  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   2  E=-8.154703  AR=0.9722  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   3  E=-8.198346  AR=0.9746  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   4  E=-8.217298  AR=0.9756  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   5  E=-8.233466  AR=0.9765  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   6  E=-8.255773  AR=0.9778  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   7  E=-8.283095  AR=0.9793  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   8  E=-8.310229  AR=0.9808  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step   9  E=-8.332657  AR=0.9820  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  10  E=-8.348731  AR=0.9829  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  11  E=-8.359591  AR=0.9835  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  12  E=-8.367568  AR=0.9840  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  13  E=-8.374695  AR=0.9844  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  14  E=-8.382007  AR=0.9848  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  15  E=-8.389410  AR=0.9852  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  16  E=-8.396078  AR=0.9856  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  17  E=-8.401196  AR=0.9858  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  18  E=-8.404517  AR=0.9860  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  19  E=-8.406362  AR=0.9861  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.05  step  20  E=-8.407268  AR=0.9862  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] 2/3 증류 c=0.1: |θ| <= 0.3 제거 → 남은 각도 61/114
+[TC3 grid3x3_inst0_seed120490 pado_safe] 3/3 exact 미세조정 c=0.1: 20 step (step당 환산 회로 123개)
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   0  E=-7.414993  AR=0.9311  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   1  E=-7.681089  AR=0.9459  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   2  E=-7.877860  AR=0.9568  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   3  E=-8.016548  AR=0.9645  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   4  E=-8.113683  AR=0.9699  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   5  E=-8.179563  AR=0.9735  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   6  E=-8.218930  AR=0.9757  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   7  E=-8.235962  AR=0.9767  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   8  E=-8.236356  AR=0.9767  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step   9  E=-8.226988  AR=0.9762  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  10  E=-8.214701  AR=0.9755  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  11  E=-8.205022  AR=0.9749  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  12  E=-8.201453  AR=0.9747  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  13  E=-8.205412  AR=0.9750  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  14  E=-8.216586  AR=0.9756  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  15  E=-8.233495  AR=0.9765  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  16  E=-8.254085  AR=0.9777  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  17  E=-8.276204  AR=0.9789  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  18  E=-8.297926  AR=0.9801  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  19  E=-8.317730  AR=0.9812  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.1  step  20  E=-8.334625  AR=0.9821  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] 2/3 증류 c=0.2: |θ| <= 0.3 제거 → 남은 각도 58/114
+[TC3 grid3x3_inst0_seed120490 pado_safe] 3/3 exact 미세조정 c=0.2: 20 step (step당 환산 회로 117개)
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   0  E=-7.518424  AR=0.9368  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   1  E=-7.778052  AR=0.9512  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   2  E=-7.975424  AR=0.9622  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   3  E=-8.118788  AR=0.9702  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   4  E=-8.226777  AR=0.9762  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   5  E=-8.313914  AR=0.9810  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   6  E=-8.387061  AR=0.9851  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   7  E=-8.447650  AR=0.9884  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   8  E=-8.494837  AR=0.9910  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step   9  E=-8.528006  AR=0.9929  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  10  E=-8.547738  AR=0.9940  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  11  E=-8.556110  AR=0.9944  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  12  E=-8.556496  AR=0.9945  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  13  E=-8.552913  AR=0.9943  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  14  E=-8.549038  AR=0.9940  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  15  E=-8.547576  AR=0.9940  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  16  E=-8.550084  AR=0.9941  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  17  E=-8.556941  AR=0.9945  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  18  E=-8.567309  AR=0.9951  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  19  E=-8.579430  AR=0.9957  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.2  step  20  E=-8.591429  AR=0.9964  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] 2/3 증류 c=0.4: |θ| <= 0.3 제거 → 남은 각도 58/114
+[TC3 grid3x3_inst0_seed120490 pado_safe] 3/3 exact 미세조정 c=0.4: 20 step (step당 환산 회로 117개)
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   0  E=-7.652584  AR=0.9443  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   1  E=-7.879883  AR=0.9569  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   2  E=-8.056868  AR=0.9667  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   3  E=-8.184793  AR=0.9738  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   4  E=-8.268503  AR=0.9785  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   5  E=-8.316672  AR=0.9811  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   6  E=-8.340300  AR=0.9825  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   7  E=-8.351334  AR=0.9831  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   8  E=-8.360313  AR=0.9836  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step   9  E=-8.373427  AR=0.9843  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  10  E=-8.391337  AR=0.9853  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  11  E=-8.411300  AR=0.9864  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  12  E=-8.429954  AR=0.9874  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  13  E=-8.445112  AR=0.9883  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  14  E=-8.456141  AR=0.9889  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  15  E=-8.463367  AR=0.9893  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  16  E=-8.467710  AR=0.9895  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  17  E=-8.470700  AR=0.9897  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  18  E=-8.474227  AR=0.9899  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  19  E=-8.479849  AR=0.9902  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] c=0.4  step  20  E=-8.488283  AR=0.9907  0.00s
+[TC3 grid3x3_inst0_seed120490 pado_safe] 끝: AR(0) → AR(20) = 0.960→0.987, 0.957→0.986, 0.931→0.982, 0.937→0.996, 0.944→0.991  저장 results_on_P300C/TC3/grid3x3_inst0_seed120490/pado_safe
+nanobind: leaked 1 instances!
+ - leaked instance 0x7ca82d36cc78 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 13 types!
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "UnaryOpType"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseOptimizedProgramFactory"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulParams"
+ - leaked type "ttnn._ttnn.tensor.CoreRangeSet"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulDeviceOperation"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulProgramConfig"
+ - ... skipped remainder
+nanobind: leaked 202 functions!
+ - leaked function ""
+ - leaked function "__init__"
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function "compute_program_hash"
+ - leaked function ""
+ - leaked function "device"
+ - leaked function ""
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:11:52.199 | info     |    BuildKernels | JIT cache stats: 33/33 hits (100.0%) [33 cached, 13 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:11:52.199 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:11:52.214 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:11:52.214 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:11:52.727 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:11:52.727 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:11:52.727 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+      (5초)
+
+===== [TC3] grid3x3_inst0_seed120490 / standard_long  (상한 2000 step)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst0_seed120490 standard_long] 시작: 초기값마다 목표 AR = PADO 최종 AR, 상한 2000 step
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step    0  AR=0.5195  목표=0.9866  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step   50  AR=0.9364  목표=0.9866  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step  100  AR=0.9644  목표=0.9866  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step  150  AR=0.9662  목표=0.9866  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step  200  AR=0.9723  목표=0.9866  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step  250  AR=0.9740  목표=0.9866  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01  step  300  AR=0.9744  목표=0.9866  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.01: step 347에서 목표 도달  (1.8s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step    0  AR=0.5220  목표=0.9862  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step   50  AR=0.9361  목표=0.9862  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  100  AR=0.9640  목표=0.9862  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  150  AR=0.9650  목표=0.9862  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  200  AR=0.9653  목표=0.9862  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  250  AR=0.9657  목표=0.9862  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  300  AR=0.9688  목표=0.9862  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  350  AR=0.9739  목표=0.9862  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  400  AR=0.9741  목표=0.9862  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05  step  450  AR=0.9778  목표=0.9862  (3s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.05: step 463에서 목표 도달  (2.7s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step    0  AR=0.5291  목표=0.9821  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step   50  AR=0.9419  목표=0.9821  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  100  AR=0.9641  목표=0.9821  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  150  AR=0.9649  목표=0.9821  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  200  AR=0.9651  목표=0.9821  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  250  AR=0.9652  목표=0.9821  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  300  AR=0.9653  목표=0.9821  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  350  AR=0.9654  목표=0.9821  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  400  AR=0.9655  목표=0.9821  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  450  AR=0.9663  목표=0.9821  (2s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  500  AR=0.9729  목표=0.9821  (3s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1  step  550  AR=0.9741  목표=0.9821  (3s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.1: step 599에서 목표 도달  (3.1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.2  step    0  AR=0.5444  목표=0.9964  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.2  step   50  AR=0.9354  목표=0.9964  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.2  step  100  AR=0.9853  목표=0.9964  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.2: step 149에서 목표 도달  (0.8s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.4  step    0  AR=0.5302  목표=0.9907  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.4  step   50  AR=0.9172  목표=0.9907  (0s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.4  step  100  AR=0.9884  목표=0.9907  (1s)
+[TC3 grid3x3_inst0_seed120490 standard_long] c=0.4: step 117에서 목표 도달  (0.6s)
+[TC3 grid3x3_inst0_seed120490 standard_long] 끝: 도달 5/5  저장 results_on_P300C/TC3/grid3x3_inst0_seed120490/standard_long
+      (11초)
+
+===== [TC3] grid3x3_inst1_seed120491 / standard
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst1_seed120491 standard] 시작: 초기값 5종 × exact 20 step (lightning.qubit, adjoint 미분)
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   0  E=+0.000400  AR=0.4590  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   1  E=-0.057569  AR=0.4618  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   2  E=-0.177217  AR=0.4675  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   3  E=-0.369946  AR=0.4768  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   4  E=-0.633420  AR=0.4894  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   5  E=-0.966377  AR=0.5053  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   6  E=-1.361410  AR=0.5242  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   7  E=-1.806869  AR=0.5456  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   8  E=-2.289826  AR=0.5687  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step   9  E=-2.795721  AR=0.5929  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  10  E=-3.309109  AR=0.6175  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  11  E=-3.815240  AR=0.6418  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  12  E=-4.302243  AR=0.6651  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  13  E=-4.762469  AR=0.6871  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  14  E=-5.190701  AR=0.7076  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  15  E=-5.581906  AR=0.7264  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  16  E=-5.930327  AR=0.7431  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  17  E=-6.230596  AR=0.7574  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  18  E=-6.479153  AR=0.7694  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  19  E=-6.674667  AR=0.7787  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.01  step  20  E=-6.819760  AR=0.7857  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   0  E=+0.011509  AR=0.4585  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   1  E=-0.210713  AR=0.4691  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   2  E=-0.459463  AR=0.4810  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   3  E=-0.747963  AR=0.4949  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   4  E=-1.080154  AR=0.5108  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   5  E=-1.458405  AR=0.5289  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   6  E=-1.877635  AR=0.5490  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   7  E=-2.325475  AR=0.5704  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   8  E=-2.786477  AR=0.5925  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step   9  E=-3.245000  AR=0.6145  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  10  E=-3.687840  AR=0.6357  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  11  E=-4.106456  AR=0.6557  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  12  E=-4.497072  AR=0.6744  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  13  E=-4.859065  AR=0.6918  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  14  E=-5.192827  AR=0.7077  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  15  E=-5.497932  AR=0.7224  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  16  E=-5.772642  AR=0.7355  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  17  E=-6.014845  AR=0.7471  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  18  E=-6.223500  AR=0.7571  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  19  E=-6.400369  AR=0.7656  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.05  step  20  E=-6.551291  AR=0.7728  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   0  E=+0.056698  AR=0.4563  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   1  E=-0.304638  AR=0.4736  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   2  E=-0.686551  AR=0.4919  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   3  E=-1.093072  AR=0.5114  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   4  E=-1.524236  AR=0.5320  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   5  E=-1.968950  AR=0.5533  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   6  E=-2.414113  AR=0.5747  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   7  E=-2.850291  AR=0.5956  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   8  E=-3.267811  AR=0.6155  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step   9  E=-3.656041  AR=0.6341  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  10  E=-4.006150  AR=0.6509  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  11  E=-4.313677  AR=0.6656  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  12  E=-4.579965  AR=0.6784  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  13  E=-4.811629  AR=0.6895  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  14  E=-5.018026  AR=0.6994  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  15  E=-5.208313  AR=0.7085  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  16  E=-5.389721  AR=0.7172  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  17  E=-5.567226  AR=0.7257  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  18  E=-5.744060  AR=0.7341  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  19  E=-5.922446  AR=0.7427  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.1  step  20  E=-6.103916  AR=0.7514  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   0  E=+0.219348  AR=0.4485  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   1  E=-0.162889  AR=0.4668  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   2  E=-0.549186  AR=0.4853  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   3  E=-0.942723  AR=0.5042  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   4  E=-1.345768  AR=0.5235  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   5  E=-1.757047  AR=0.5432  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   6  E=-2.170707  AR=0.5630  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   7  E=-2.579824  AR=0.5826  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   8  E=-2.978228  AR=0.6017  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step   9  E=-3.359948  AR=0.6200  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  10  E=-3.719631  AR=0.6372  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  11  E=-4.053914  AR=0.6532  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  12  E=-4.362503  AR=0.6680  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  13  E=-4.648408  AR=0.6817  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  14  E=-4.917768  AR=0.6946  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  15  E=-5.178594  AR=0.7071  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  16  E=-5.437932  AR=0.7195  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  17  E=-5.699837  AR=0.7320  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  18  E=-5.965321  AR=0.7447  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  19  E=-6.233141  AR=0.7576  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.2  step  20  E=-6.500711  AR=0.7704  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   0  E=+0.340491  AR=0.4427  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   1  E=-0.037709  AR=0.4608  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   2  E=-0.389623  AR=0.4777  0.01s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   3  E=-0.713246  AR=0.4932  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   4  E=-1.014297  AR=0.5076  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   5  E=-1.303053  AR=0.5215  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   6  E=-1.589417  AR=0.5352  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   7  E=-1.877141  AR=0.5489  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   8  E=-2.165662  AR=0.5628  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step   9  E=-2.452827  AR=0.5765  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  10  E=-2.735972  AR=0.5901  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  11  E=-3.012832  AR=0.6033  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  12  E=-3.282511  AR=0.6163  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  13  E=-3.545686  AR=0.6289  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  14  E=-3.803864  AR=0.6412  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  15  E=-4.058475  AR=0.6534  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  16  E=-4.310809  AR=0.6655  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  17  E=-4.562476  AR=0.6776  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  18  E=-4.815351  AR=0.6897  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  19  E=-5.070851  AR=0.7019  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] c=0.4  step  20  E=-5.329100  AR=0.7143  0.00s
+[TC3 grid3x3_inst1_seed120491 standard] 끝: AR(0) → AR(20) = 0.459→0.786, 0.458→0.773, 0.456→0.751, 0.449→0.770, 0.443→0.714  저장 results_on_P300C/TC3/grid3x3_inst1_seed120491/standard
+      (2초)
+
+===== [TC3] grid3x3_inst1_seed120491 / pado_safe
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst1_seed120491 pado_safe] 1/3 LWPP 사전학습: max_weight 3, 100 step, float32 (NPU, 양자 자원 0)
+2026-10-30 11:12:08.209 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:12:08.248 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:12:08.248 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:12:08.248 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:12:08.248 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:12:08.261 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:12:08.261 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:12:08.270 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:12:08.270 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:12:08.270 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:12:08.270 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:12:08.272 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:12:08.517 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:12:08.610 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:12:08.610 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:08.610 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:12:08.610 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:12:08.619 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:08.619 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:08.619 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:08.619 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:08.654 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+[TC3 grid3x3_inst1_seed120491 pado_safe] compile 1.2s  terms=120  host peak RSS=0.58 GB  NPU DRAM=0.000 GB
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step    0  E_lwpp=[0.0004, 0.0116, 0.0598, 0.2522, 0.3182]
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step   20  E_lwpp=[-7.4234, -7.1562, -6.5572, -6.952, -5.609]
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step   40  E_lwpp=[-8.4032, -8.5032, -8.5671, -8.8717, -8.3973]
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step   60  E_lwpp=[-9.2186, -9.9576, -10.4935, -10.5444, -9.5321]
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step   80  E_lwpp=[-10.5465, -10.8541, -11.0328, -11.1354, -10.2649]
+[TC3 grid3x3_inst1_seed120491 pado_safe] lwpp step   99  E_lwpp=[-10.964, -11.1286, -11.1672, -11.2302, -10.8735]
+[TC3 grid3x3_inst1_seed120491 pado_safe] 사전학습 끝 0.6s  host peak RSS=0.69 GB  NPU DRAM=0.034 GB
+[TC3 grid3x3_inst1_seed120491 pado_safe] 2/3 증류 c=0.01: |θ| <= 0.3 제거 → 남은 각도 54/114
+[TC3 grid3x3_inst1_seed120491 pado_safe] 3/3 exact 미세조정 c=0.01: 20 step (step당 환산 회로 109개)
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   0  E=-10.593225  AR=0.9664  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   1  E=-10.710138  AR=0.9720  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   2  E=-10.802989  AR=0.9764  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   3  E=-10.876028  AR=0.9799  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   4  E=-10.935489  AR=0.9828  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   5  E=-10.982659  AR=0.9850  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   6  E=-11.018499  AR=0.9868  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   7  E=-11.044595  AR=0.9880  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   8  E=-11.061958  AR=0.9888  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step   9  E=-11.072148  AR=0.9893  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  10  E=-11.077747  AR=0.9896  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  11  E=-11.081280  AR=0.9898  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  12  E=-11.084205  AR=0.9899  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  13  E=-11.087149  AR=0.9900  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  14  E=-11.090576  AR=0.9902  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  15  E=-11.094977  AR=0.9904  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  16  E=-11.100635  AR=0.9907  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  17  E=-11.107409  AR=0.9910  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  18  E=-11.114724  AR=0.9914  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  19  E=-11.121731  AR=0.9917  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.01  step  20  E=-11.127624  AR=0.9920  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] 2/3 증류 c=0.05: |θ| <= 0.3 제거 → 남은 각도 47/114
+[TC3 grid3x3_inst1_seed120491 pado_safe] 3/3 exact 미세조정 c=0.05: 20 step (step당 환산 회로 95개)
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   0  E=-10.995472  AR=0.9857  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   1  E=-11.033806  AR=0.9875  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   2  E=-11.067796  AR=0.9891  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   3  E=-11.086122  AR=0.9900  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   4  E=-11.093360  AR=0.9903  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   5  E=-11.097944  AR=0.9906  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   6  E=-11.102374  AR=0.9908  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   7  E=-11.105645  AR=0.9909  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   8  E=-11.107782  AR=0.9910  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step   9  E=-11.110448  AR=0.9912  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  10  E=-11.114674  AR=0.9914  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  11  E=-11.119701  AR=0.9916  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  12  E=-11.124257  AR=0.9918  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  13  E=-11.127719  AR=0.9920  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  14  E=-11.130176  AR=0.9921  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  15  E=-11.131903  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  16  E=-11.132913  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  17  E=-11.133096  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  18  E=-11.132655  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  19  E=-11.132196  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.05  step  20  E=-11.132295  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] 2/3 증류 c=0.1: |θ| <= 0.3 제거 → 남은 각도 49/114
+[TC3 grid3x3_inst1_seed120491 pado_safe] 3/3 exact 미세조정 c=0.1: 20 step (step당 환산 회로 99개)
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   0  E=-11.072877  AR=0.9894  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   1  E=-11.083146  AR=0.9899  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   2  E=-11.111347  AR=0.9912  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   3  E=-11.118682  AR=0.9916  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   4  E=-11.117663  AR=0.9915  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   5  E=-11.121411  AR=0.9917  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   6  E=-11.125802  AR=0.9919  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   7  E=-11.125913  AR=0.9919  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   8  E=-11.122653  AR=0.9917  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step   9  E=-11.120570  AR=0.9916  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  10  E=-11.121984  AR=0.9917  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  11  E=-11.125206  AR=0.9919  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  12  E=-11.127661  AR=0.9920  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  13  E=-11.128625  AR=0.9920  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  14  E=-11.129356  AR=0.9921  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  15  E=-11.131053  AR=0.9921  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  16  E=-11.133316  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  17  E=-11.134831  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  18  E=-11.134921  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  19  E=-11.134147  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.1  step  20  E=-11.133524  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] 2/3 증류 c=0.2: |θ| <= 0.3 제거 → 남은 각도 55/114
+[TC3 grid3x3_inst1_seed120491 pado_safe] 3/3 exact 미세조정 c=0.2: 20 step (step당 환산 회로 111개)
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   0  E=-10.961834  AR=0.9840  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   1  E=-10.992083  AR=0.9855  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   2  E=-11.025757  AR=0.9871  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   3  E=-11.044034  AR=0.9880  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   4  E=-11.055382  AR=0.9885  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   5  E=-11.067495  AR=0.9891  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   6  E=-11.080055  AR=0.9897  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   7  E=-11.090493  AR=0.9902  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   8  E=-11.098317  AR=0.9906  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step   9  E=-11.105124  AR=0.9909  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  10  E=-11.111709  AR=0.9912  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  11  E=-11.117334  AR=0.9915  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  12  E=-11.121089  AR=0.9917  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  13  E=-11.123145  AR=0.9918  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  14  E=-11.124698  AR=0.9918  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  15  E=-11.126681  AR=0.9919  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  16  E=-11.128966  AR=0.9920  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  17  E=-11.130901  AR=0.9921  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  18  E=-11.132216  AR=0.9922  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  19  E=-11.133255  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.2  step  20  E=-11.134323  AR=0.9923  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] 2/3 증류 c=0.4: |θ| <= 0.3 제거 → 남은 각도 49/114
+[TC3 grid3x3_inst1_seed120491 pado_safe] 3/3 exact 미세조정 c=0.4: 20 step (step당 환산 회로 99개)
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   0  E=-10.858915  AR=0.9791  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   1  E=-10.905345  AR=0.9813  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   2  E=-10.942055  AR=0.9831  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   3  E=-10.967878  AR=0.9843  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   4  E=-10.987105  AR=0.9853  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   5  E=-11.004413  AR=0.9861  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   6  E=-11.021355  AR=0.9869  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   7  E=-11.037365  AR=0.9877  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   8  E=-11.051830  AR=0.9884  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step   9  E=-11.064966  AR=0.9890  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  10  E=-11.076859  AR=0.9896  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  11  E=-11.087200  AR=0.9900  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  12  E=-11.095688  AR=0.9905  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  13  E=-11.102424  AR=0.9908  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  14  E=-11.107880  AR=0.9910  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  15  E=-11.112541  AR=0.9913  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  16  E=-11.116686  AR=0.9915  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  17  E=-11.120401  AR=0.9916  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  18  E=-11.123711  AR=0.9918  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  19  E=-11.126644  AR=0.9919  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] c=0.4  step  20  E=-11.129194  AR=0.9921  0.00s
+[TC3 grid3x3_inst1_seed120491 pado_safe] 끝: AR(0) → AR(20) = 0.966→0.992, 0.986→0.992, 0.989→0.992, 0.984→0.992, 0.979→0.992  저장 results_on_P300C/TC3/grid3x3_inst1_seed120491/pado_safe
+nanobind: leaked 1 instances!
+ - leaked instance 0x78db4064cbe8 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 13 types!
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "UnaryOpType"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseOptimizedProgramFactory"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulParams"
+ - leaked type "ttnn._ttnn.tensor.CoreRangeSet"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulDeviceOperation"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulProgramConfig"
+ - ... skipped remainder
+nanobind: leaked 202 functions!
+ - leaked function ""
+ - leaked function "unpad"
+ - leaked function ""
+ - leaked function "logical_volume"
+ - leaked function "to"
+ - leaked function "get_current_command_queue_id_for_thread"
+ - leaked function "to_json"
+ - leaked function "__repr__"
+ - leaked function ""
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:12:10.761 | info     |    BuildKernels | JIT cache stats: 33/33 hits (100.0%) [33 cached, 13 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:12:10.761 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:12:10.776 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:12:10.776 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:12:11.231 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:12:11.231 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:12:11.231 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+      (5초)
+
+===== [TC3] grid3x3_inst1_seed120491 / standard_long  (상한 2000 step)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst1_seed120491 standard_long] 시작: 초기값마다 목표 AR = PADO 최종 AR, 상한 2000 step
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.01  step    0  AR=0.4590  목표=0.9920  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.01  step   50  AR=0.9319  목표=0.9920  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.01  step  100  AR=0.9674  목표=0.9920  (1s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.01: step 146에서 목표 도달  (0.9s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.05  step    0  AR=0.4585  목표=0.9922  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.05  step   50  AR=0.9433  목표=0.9922  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.05  step  100  AR=0.9907  목표=0.9922  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.05: step 123에서 목표 도달  (0.6s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.1  step    0  AR=0.4563  목표=0.9923  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.1  step   50  AR=0.9545  목표=0.9923  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.1  step  100  AR=0.9918  목표=0.9923  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.1: step 115에서 목표 도달  (0.6s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.2  step    0  AR=0.4485  목표=0.9923  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.2  step   50  AR=0.9555  목표=0.9923  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.2  step  100  AR=0.9918  목표=0.9923  (1s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.2: step 125에서 목표 도달  (0.7s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.4  step    0  AR=0.4427  목표=0.9921  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.4  step   50  AR=0.9403  목표=0.9921  (0s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.4  step  100  AR=0.9617  목표=0.9921  (1s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.4  step  150  AR=0.9877  목표=0.9921  (1s)
+[TC3 grid3x3_inst1_seed120491 standard_long] c=0.4: step 169에서 목표 도달  (0.9s)
+[TC3 grid3x3_inst1_seed120491 standard_long] 끝: 도달 5/5  저장 results_on_P300C/TC3/grid3x3_inst1_seed120491/standard_long
+      (6초)
+
+===== [TC3] grid3x3_inst2_seed120492 / standard
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst2_seed120492 standard] 시작: 초기값 5종 × exact 20 step (lightning.qubit, adjoint 미분)
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   0  E=+0.002557  AR=0.5552  0.01s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   1  E=-0.025176  AR=0.5571  0.01s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   2  E=-0.093875  AR=0.5619  0.01s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   3  E=-0.207882  AR=0.5698  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   4  E=-0.368192  AR=0.5809  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   5  E=-0.580587  AR=0.5957  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   6  E=-0.838695  AR=0.6136  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   7  E=-1.129944  AR=0.6339  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   8  E=-1.439932  AR=0.6555  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step   9  E=-1.754068  AR=0.6773  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  10  E=-2.059682  AR=0.6985  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  11  E=-2.348736  AR=0.7186  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  12  E=-2.617188  AR=0.7373  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  13  E=-2.863624  AR=0.7544  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  14  E=-3.088543  AR=0.7701  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  15  E=-3.293584  AR=0.7843  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  16  E=-3.480794  AR=0.7974  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  17  E=-3.652294  AR=0.8093  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  18  E=-3.810181  AR=0.8203  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  19  E=-3.956406  AR=0.8304  0.01s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.01  step  20  E=-4.091930  AR=0.8399  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   0  E=+0.056983  AR=0.5514  0.01s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   1  E=-0.108507  AR=0.5629  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   2  E=-0.259681  AR=0.5734  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   3  E=-0.411880  AR=0.5840  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   4  E=-0.587710  AR=0.5962  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   5  E=-0.800430  AR=0.6110  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   6  E=-1.046181  AR=0.6281  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   7  E=-1.315179  AR=0.6468  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   8  E=-1.597598  AR=0.6664  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step   9  E=-1.882915  AR=0.6863  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  10  E=-2.160037  AR=0.7055  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  11  E=-2.419416  AR=0.7236  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  12  E=-2.654547  AR=0.7399  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  13  E=-2.862092  AR=0.7543  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  14  E=-3.041521  AR=0.7668  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  15  E=-3.194936  AR=0.7775  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  16  E=-3.326882  AR=0.7867  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  17  E=-3.443730  AR=0.7948  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  18  E=-3.552601  AR=0.8024  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  19  E=-3.660212  AR=0.8098  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.05  step  20  E=-3.772016  AR=0.8176  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   0  E=+0.162189  AR=0.5441  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   1  E=-0.112532  AR=0.5632  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   2  E=-0.373016  AR=0.5813  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   3  E=-0.621067  AR=0.5985  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   4  E=-0.855963  AR=0.6148  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   5  E=-1.081511  AR=0.6305  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   6  E=-1.306095  AR=0.6461  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   7  E=-1.535436  AR=0.6621  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   8  E=-1.768374  AR=0.6783  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step   9  E=-1.999036  AR=0.6943  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  10  E=-2.220997  AR=0.7098  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  11  E=-2.428496  AR=0.7242  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  12  E=-2.616572  AR=0.7373  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  13  E=-2.782145  AR=0.7488  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  14  E=-2.924609  AR=0.7587  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  15  E=-3.045581  AR=0.7671  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  16  E=-3.148448  AR=0.7743  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  17  E=-3.237985  AR=0.7805  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  18  E=-3.319815  AR=0.7862  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  19  E=-3.399676  AR=0.7917  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.1  step  20  E=-3.482722  AR=0.7975  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   0  E=+0.193793  AR=0.5419  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   1  E=-0.098058  AR=0.5621  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   2  E=-0.394636  AR=0.5828  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   3  E=-0.700611  AR=0.6040  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   4  E=-1.013694  AR=0.6258  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   5  E=-1.331956  AR=0.6479  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   6  E=-1.649158  AR=0.6700  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   7  E=-1.958302  AR=0.6915  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   8  E=-2.252678  AR=0.7120  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step   9  E=-2.526039  AR=0.7310  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  10  E=-2.773795  AR=0.7482  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  11  E=-2.994489  AR=0.7635  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  12  E=-3.190876  AR=0.7772  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  13  E=-3.369584  AR=0.7896  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  14  E=-3.538503  AR=0.8014  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  15  E=-3.703332  AR=0.8128  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  16  E=-3.865881  AR=0.8241  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  17  E=-4.024527  AR=0.8352  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  18  E=-4.175729  AR=0.8457  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  19  E=-4.315692  AR=0.8554  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.2  step  20  E=-4.441752  AR=0.8642  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   0  E=-0.075957  AR=0.5606  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   1  E=-0.421993  AR=0.5847  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   2  E=-0.745499  AR=0.6072  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   3  E=-1.052612  AR=0.6285  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   4  E=-1.347098  AR=0.6490  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   5  E=-1.630453  AR=0.6687  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   6  E=-1.903269  AR=0.6877  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   7  E=-2.166543  AR=0.7060  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   8  E=-2.422474  AR=0.7238  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step   9  E=-2.673722  AR=0.7412  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  10  E=-2.922077  AR=0.7585  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  11  E=-3.167262  AR=0.7756  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  12  E=-3.406305  AR=0.7922  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  13  E=-3.633819  AR=0.8080  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  14  E=-3.843302  AR=0.8226  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  15  E=-4.029409  AR=0.8355  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  16  E=-4.190232  AR=0.8467  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  17  E=-4.328053  AR=0.8563  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  18  E=-4.447806  AR=0.8646  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  19  E=-4.554361  AR=0.8720  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] c=0.4  step  20  E=-4.650806  AR=0.8787  0.00s
+[TC3 grid3x3_inst2_seed120492 standard] 끝: AR(0) → AR(20) = 0.555→0.840, 0.551→0.818, 0.544→0.797, 0.542→0.864, 0.561→0.879  저장 results_on_P300C/TC3/grid3x3_inst2_seed120492/standard
+      (3초)
+
+===== [TC3] grid3x3_inst2_seed120492 / pado_safe
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst2_seed120492 pado_safe] 1/3 LWPP 사전학습: max_weight 3, 100 step, float32 (NPU, 양자 자원 0)
+2026-10-30 11:12:21.391 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:12:21.431 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:12:21.431 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:12:21.431 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:12:21.431 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:12:21.445 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:12:21.445 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:12:21.454 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:12:21.454 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:12:21.454 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:12:21.454 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:12:21.456 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:12:21.719 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:12:21.810 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:12:21.810 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:21.811 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:12:21.811 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:12:21.821 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:21.821 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:21.821 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:21.821 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:21.855 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+[TC3 grid3x3_inst2_seed120492 pado_safe] compile 1.3s  terms=120  host peak RSS=0.58 GB  NPU DRAM=0.000 GB
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step    0  E_lwpp=[0.0026, 0.0568, 0.1563, 0.1205, -0.0187]
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step   20  E_lwpp=[-4.2344, -3.8827, -3.5679, -5.0128, -4.8681]
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step   40  E_lwpp=[-5.4537, -5.4615, -5.4342, -5.6491, -5.7334]
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step   60  E_lwpp=[-6.1767, -6.197, -6.1133, -6.2569, -6.0476]
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step   80  E_lwpp=[-6.4935, -6.5048, -6.462, -6.6272, -6.4845]
+[TC3 grid3x3_inst2_seed120492 pado_safe] lwpp step   99  E_lwpp=[-6.6385, -6.6252, -6.5571, -6.7695, -6.6881]
+[TC3 grid3x3_inst2_seed120492 pado_safe] 사전학습 끝 0.6s  host peak RSS=0.69 GB  NPU DRAM=0.034 GB
+[TC3 grid3x3_inst2_seed120492 pado_safe] 2/3 증류 c=0.01: |θ| <= 0.3 제거 → 남은 각도 47/114
+[TC3 grid3x3_inst2_seed120492 pado_safe] 3/3 exact 미세조정 c=0.01: 20 step (step당 환산 회로 95개)
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   0  E=-5.177859  AR=0.9154  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   1  E=-5.264571  AR=0.9214  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   2  E=-5.336016  AR=0.9264  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   3  E=-5.396331  AR=0.9306  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   4  E=-5.447945  AR=0.9341  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   5  E=-5.492338  AR=0.9372  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   6  E=-5.530518  AR=0.9399  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   7  E=-5.563567  AR=0.9422  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   8  E=-5.592836  AR=0.9442  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step   9  E=-5.619592  AR=0.9461  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  10  E=-5.644705  AR=0.9478  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  11  E=-5.668582  AR=0.9495  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  12  E=-5.691273  AR=0.9511  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  13  E=-5.712716  AR=0.9526  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  14  E=-5.733002  AR=0.9540  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  15  E=-5.752399  AR=0.9553  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  16  E=-5.771055  AR=0.9566  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  17  E=-5.788853  AR=0.9579  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  18  E=-5.805619  AR=0.9590  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  19  E=-5.821399  AR=0.9601  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.01  step  20  E=-5.836461  AR=0.9612  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] 2/3 증류 c=0.05: |θ| <= 0.3 제거 → 남은 각도 49/114
+[TC3 grid3x3_inst2_seed120492 pado_safe] 3/3 exact 미세조정 c=0.05: 20 step (step당 환산 회로 99개)
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   0  E=-5.121402  AR=0.9114  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   1  E=-5.224987  AR=0.9186  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   2  E=-5.311978  AR=0.9247  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   3  E=-5.384444  AR=0.9297  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   4  E=-5.446578  AR=0.9341  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   5  E=-5.500272  AR=0.9378  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   6  E=-5.546298  AR=0.9410  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   7  E=-5.585472  AR=0.9437  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   8  E=-5.619020  AR=0.9460  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step   9  E=-5.648669  AR=0.9481  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  10  E=-5.675909  AR=0.9500  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  11  E=-5.701332  AR=0.9518  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  12  E=-5.724864  AR=0.9534  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  13  E=-5.746377  AR=0.9549  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  14  E=-5.766084  AR=0.9563  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  15  E=-5.784436  AR=0.9575  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  16  E=-5.801783  AR=0.9588  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  17  E=-5.818260  AR=0.9599  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  18  E=-5.833947  AR=0.9610  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  19  E=-5.848977  AR=0.9620  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.05  step  20  E=-5.863440  AR=0.9630  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] 2/3 증류 c=0.1: |θ| <= 0.3 제거 → 남은 각도 46/114
+[TC3 grid3x3_inst2_seed120492 pado_safe] 3/3 exact 미세조정 c=0.1: 20 step (step당 환산 회로 93개)
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   0  E=-5.460782  AR=0.9350  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   1  E=-5.547520  AR=0.9411  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   2  E=-5.608506  AR=0.9453  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   3  E=-5.656330  AR=0.9486  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   4  E=-5.699482  AR=0.9516  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   5  E=-5.739711  AR=0.9544  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   6  E=-5.776404  AR=0.9570  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   7  E=-5.808984  AR=0.9593  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   8  E=-5.837707  AR=0.9612  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step   9  E=-5.863478  AR=0.9630  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  10  E=-5.887336  AR=0.9647  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  11  E=-5.909680  AR=0.9663  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  12  E=-5.930110  AR=0.9677  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  13  E=-5.947940  AR=0.9689  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  14  E=-5.962807  AR=0.9699  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  15  E=-5.974986  AR=0.9708  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  16  E=-5.985181  AR=0.9715  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  17  E=-5.994062  AR=0.9721  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  18  E=-6.001938  AR=0.9727  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  19  E=-6.008768  AR=0.9731  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.1  step  20  E=-6.014406  AR=0.9735  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] 2/3 증류 c=0.2: |θ| <= 0.3 제거 → 남은 각도 43/114
+[TC3 grid3x3_inst2_seed120492 pado_safe] 3/3 exact 미세조정 c=0.2: 20 step (step당 환산 회로 87개)
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   0  E=-5.037352  AR=0.9056  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   1  E=-5.130781  AR=0.9121  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   2  E=-5.196244  AR=0.9166  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   3  E=-5.238926  AR=0.9196  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   4  E=-5.268325  AR=0.9217  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   5  E=-5.291003  AR=0.9232  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   6  E=-5.309447  AR=0.9245  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   7  E=-5.324264  AR=0.9255  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   8  E=-5.335474  AR=0.9263  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step   9  E=-5.343207  AR=0.9269  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  10  E=-5.348123  AR=0.9272  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  11  E=-5.351448  AR=0.9274  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  12  E=-5.354584  AR=0.9277  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  13  E=-5.358531  AR=0.9279  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  14  E=-5.363535  AR=0.9283  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  15  E=-5.369280  AR=0.9287  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  16  E=-5.375269  AR=0.9291  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  17  E=-5.381120  AR=0.9295  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  18  E=-5.386711  AR=0.9299  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  19  E=-5.392195  AR=0.9303  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.2  step  20  E=-5.397880  AR=0.9307  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] 2/3 증류 c=0.4: |θ| <= 0.3 제거 → 남은 각도 43/114
+[TC3 grid3x3_inst2_seed120492 pado_safe] 3/3 exact 미세조정 c=0.4: 20 step (step당 환산 회로 87개)
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   0  E=-5.025506  AR=0.9048  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   1  E=-5.123831  AR=0.9116  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   2  E=-5.186300  AR=0.9160  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   3  E=-5.222822  AR=0.9185  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   4  E=-5.243139  AR=0.9199  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   5  E=-5.256164  AR=0.9208  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   6  E=-5.269256  AR=0.9217  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   7  E=-5.286238  AR=0.9229  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   8  E=-5.307530  AR=0.9244  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step   9  E=-5.331497  AR=0.9261  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  10  E=-5.355889  AR=0.9277  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  11  E=-5.378921  AR=0.9293  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  12  E=-5.399788  AR=0.9308  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  13  E=-5.418830  AR=0.9321  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  14  E=-5.437118  AR=0.9334  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  15  E=-5.455736  AR=0.9347  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  16  E=-5.475402  AR=0.9361  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  17  E=-5.496437  AR=0.9375  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  18  E=-5.518868  AR=0.9391  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  19  E=-5.542440  AR=0.9407  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] c=0.4  step  20  E=-5.566568  AR=0.9424  0.00s
+[TC3 grid3x3_inst2_seed120492 pado_safe] 끝: AR(0) → AR(20) = 0.915→0.961, 0.911→0.963, 0.935→0.974, 0.906→0.931, 0.905→0.942  저장 results_on_P300C/TC3/grid3x3_inst2_seed120492/pado_safe
+nanobind: leaked 1 instances!
+ - leaked instance 0x79da069a4b58 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 13 types!
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "UnaryOpType"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseOptimizedProgramFactory"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulParams"
+ - leaked type "ttnn._ttnn.tensor.CoreRangeSet"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulDeviceOperation"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulProgramConfig"
+ - ... skipped remainder
+nanobind: leaked 202 functions!
+ - leaked function "size"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "tensor_topology"
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function "pad"
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:12:24.068 | info     |    BuildKernels | JIT cache stats: 33/33 hits (100.0%) [33 cached, 13 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:12:24.068 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:12:24.083 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:12:24.083 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:12:24.533 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:12:24.533 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:12:24.533 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+      (5초)
+
+===== [TC3] grid3x3_inst2_seed120492 / standard_long  (상한 2000 step)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst2_seed120492 standard_long] 시작: 초기값마다 목표 AR = PADO 최종 AR, 상한 2000 step
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.01  step    0  AR=0.5552  목표=0.9612  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.01  step   50  AR=0.9453  목표=0.9612  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.01: step 62에서 목표 도달  (0.3s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.05  step    0  AR=0.5514  목표=0.9630  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.05  step   50  AR=0.9445  목표=0.9630  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.05: step 70에서 목표 도달  (0.5s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.1  step    0  AR=0.5441  목표=0.9735  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.1  step   50  AR=0.9440  목표=0.9735  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.1: step 87에서 목표 도달  (0.4s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.2  step    0  AR=0.5419  목표=0.9307  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.2  step   50  AR=0.9274  목표=0.9307  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.2: step 56에서 목표 도달  (0.3s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step    0  AR=0.5606  목표=0.9424  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step   50  AR=0.9281  목표=0.9424  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  100  AR=0.9308  목표=0.9424  (0s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  150  AR=0.9333  목표=0.9424  (1s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  200  AR=0.9387  목표=0.9424  (1s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  250  AR=0.9390  목표=0.9424  (1s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  300  AR=0.9390  목표=0.9424  (2s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  350  AR=0.9391  목표=0.9424  (2s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  400  AR=0.9391  목표=0.9424  (2s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  450  AR=0.9391  목표=0.9424  (2s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  500  AR=0.9391  목표=0.9424  (3s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  550  AR=0.9392  목표=0.9424  (3s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4  step  600  AR=0.9395  목표=0.9424  (3s)
+[TC3 grid3x3_inst2_seed120492 standard_long] c=0.4: step 628에서 목표 도달  (3.4s)
+[TC3 grid3x3_inst2_seed120492 standard_long] 끝: 도달 5/5  저장 results_on_P300C/TC3/grid3x3_inst2_seed120492/standard_long
+      (7초)
+
+===== [TC3] grid3x3_inst3_seed120493 / standard
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst3_seed120493 standard] 시작: 초기값 5종 × exact 20 step (lightning.qubit, adjoint 미분)
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   0  E=-0.005665  AR=0.4279  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   1  E=-0.096808  AR=0.4325  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   2  E=-0.264386  AR=0.4410  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   3  E=-0.514643  AR=0.4537  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   4  E=-0.836132  AR=0.4700  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   5  E=-1.214856  AR=0.4892  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   6  E=-1.640339  AR=0.5107  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   7  E=-2.102139  AR=0.5341  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   8  E=-2.584763  AR=0.5586  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step   9  E=-3.071249  AR=0.5832  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  10  E=-3.547317  AR=0.6074  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  11  E=-4.003462  AR=0.6305  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  12  E=-4.434082  AR=0.6523  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  13  E=-4.835643  AR=0.6726  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  14  E=-5.205550  AR=0.6914  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  15  E=-5.540357  AR=0.7083  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  16  E=-5.835352  AR=0.7233  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  17  E=-6.085501  AR=0.7360  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  18  E=-6.287319  AR=0.7462  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  19  E=-6.440636  AR=0.7540  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.01  step  20  E=-6.549958  AR=0.7595  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   0  E=-0.129613  AR=0.4342  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   1  E=-0.377380  AR=0.4467  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   2  E=-0.686484  AR=0.4624  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   3  E=-1.046713  AR=0.4807  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   4  E=-1.453182  AR=0.5012  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   5  E=-1.897003  AR=0.5237  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   6  E=-2.365154  AR=0.5475  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   7  E=-2.846816  AR=0.5719  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   8  E=-3.330636  AR=0.5964  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step   9  E=-3.804563  AR=0.6204  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  10  E=-4.257434  AR=0.6433  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  11  E=-4.679282  AR=0.6647  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  12  E=-5.062274  AR=0.6841  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  13  E=-5.401780  AR=0.7013  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  14  E=-5.697080  AR=0.7163  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  15  E=-5.949712  AR=0.7291  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  16  E=-6.160834  AR=0.7398  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  17  E=-6.330719  AR=0.7484  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  18  E=-6.460643  AR=0.7550  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  19  E=-6.555598  AR=0.7598  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.05  step  20  E=-6.625499  AR=0.7633  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   0  E=-0.400521  AR=0.4479  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   1  E=-0.764952  AR=0.4664  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   2  E=-1.170492  AR=0.4869  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   3  E=-1.609525  AR=0.5092  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   4  E=-2.071792  AR=0.5326  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   5  E=-2.545036  AR=0.5566  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   6  E=-3.018281  AR=0.5806  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   7  E=-3.483253  AR=0.6041  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   8  E=-3.933910  AR=0.6269  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step   9  E=-4.366124  AR=0.6488  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  10  E=-4.774449  AR=0.6695  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  11  E=-5.151087  AR=0.6886  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  12  E=-5.488253  AR=0.7057  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  13  E=-5.780775  AR=0.7205  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  14  E=-6.026597  AR=0.7330  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  15  E=-6.226284  AR=0.7431  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  16  E=-6.382960  AR=0.7510  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  17  E=-6.502817  AR=0.7571  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  18  E=-6.595611  AR=0.7618  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  19  E=-6.673950  AR=0.7658  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.1  step  20  E=-6.750935  AR=0.7697  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   0  E=-0.691828  AR=0.4627  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   1  E=-1.077067  AR=0.4822  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   2  E=-1.476426  AR=0.5024  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   3  E=-1.896956  AR=0.5237  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   4  E=-2.333511  AR=0.5459  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   5  E=-2.775150  AR=0.5682  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   6  E=-3.211738  AR=0.5904  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   7  E=-3.637918  AR=0.6119  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   8  E=-4.051815  AR=0.6329  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step   9  E=-4.453744  AR=0.6533  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  10  E=-4.846028  AR=0.6732  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  11  E=-5.231417  AR=0.6927  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  12  E=-5.610449  AR=0.7119  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  13  E=-5.981195  AR=0.7307  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  14  E=-6.339684  AR=0.7488  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  15  E=-6.680093  AR=0.7661  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  16  E=-6.995949  AR=0.7821  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  17  E=-7.281831  AR=0.7966  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  18  E=-7.535361  AR=0.8094  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  19  E=-7.758943  AR=0.8208  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.2  step  20  E=-7.959841  AR=0.8309  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   0  E=-0.390742  AR=0.4474  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   1  E=-0.860764  AR=0.4712  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   2  E=-1.325291  AR=0.4948  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   3  E=-1.782606  AR=0.5179  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   4  E=-2.227605  AR=0.5405  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   5  E=-2.650238  AR=0.5619  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   6  E=-3.038784  AR=0.5816  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   7  E=-3.386829  AR=0.5992  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   8  E=-3.696365  AR=0.6149  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step   9  E=-3.974156  AR=0.6290  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  10  E=-4.229035  AR=0.6419  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  11  E=-4.471433  AR=0.6542  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  12  E=-4.711051  AR=0.6663  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  13  E=-4.953828  AR=0.6786  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  14  E=-5.200590  AR=0.6911  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  15  E=-5.447957  AR=0.7037  0.01s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  16  E=-5.690710  AR=0.7160  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  17  E=-5.924584  AR=0.7278  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  18  E=-6.148143  AR=0.7391  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  19  E=-6.362741  AR=0.7500  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] c=0.4  step  20  E=-6.571229  AR=0.7606  0.00s
+[TC3 grid3x3_inst3_seed120493 standard] 끝: AR(0) → AR(20) = 0.428→0.759, 0.434→0.763, 0.448→0.770, 0.463→0.831, 0.447→0.761  저장 results_on_P300C/TC3/grid3x3_inst3_seed120493/standard
+      (3초)
+
+===== [TC3] grid3x3_inst3_seed120493 / pado_safe
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst3_seed120493 pado_safe] 1/3 LWPP 사전학습: max_weight 3, 100 step, float32 (NPU, 양자 자원 0)
+2026-10-30 11:12:35.803 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:12:35.839 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:12:35.839 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:12:35.839 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:12:35.839 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:12:35.852 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:12:35.853 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:12:35.861 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:12:35.861 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:12:35.861 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:12:35.861 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:12:35.862 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:12:36.121 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:12:36.212 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:12:36.212 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:12:36.212 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:12:36.212 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:12:36.220 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:36.220 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:36.220 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:36.220 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:12:36.255 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+[TC3 grid3x3_inst3_seed120493 pado_safe] compile 1.2s  terms=120  host peak RSS=0.58 GB  NPU DRAM=0.000 GB
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step    0  E_lwpp=[-0.0057, -0.1294, -0.3922, -0.5819, -0.504]
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step   20  E_lwpp=[-7.0257, -7.0511, -7.0761, -7.7662, -6.4738]
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step   40  E_lwpp=[-8.3091, -8.288, -8.4153, -9.0494, -11.9999]
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step   60  E_lwpp=[-11.4017, -10.2024, -9.8316, -10.1844, -14.9692]
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step   80  E_lwpp=[-12.8408, -11.9459, -11.5046, -10.8987, -16.171]
+[TC3 grid3x3_inst3_seed120493 pado_safe] lwpp step   99  E_lwpp=[-14.9176, -12.8595, -12.081, -10.924, -16.6822]
+[TC3 grid3x3_inst3_seed120493 pado_safe] 사전학습 끝 0.6s  host peak RSS=0.69 GB  NPU DRAM=0.034 GB
+[TC3 grid3x3_inst3_seed120493 pado_safe] 2/3 증류 c=0.01: |θ| <= 0.3 제거 → 남은 각도 55/114
+[TC3 grid3x3_inst3_seed120493 pado_safe] 3/3 exact 미세조정 c=0.01: 20 step (step당 환산 회로 111개)
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   0  E=-9.326392  AR=0.9002  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   1  E=-9.848491  AR=0.9266  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   2  E=-10.282339  AR=0.9486  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   3  E=-10.620654  AR=0.9658  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   4  E=-10.862181  AR=0.9780  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   5  E=-11.012884  AR=0.9856  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   6  E=-11.083422  AR=0.9892  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   7  E=-11.091914  AR=0.9896  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   8  E=-11.062784  AR=0.9882  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step   9  E=-11.020832  AR=0.9860  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  10  E=-10.985423  AR=0.9842  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  11  E=-10.967936  AR=0.9834  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  12  E=-10.972268  AR=0.9836  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  13  E=-10.996582  AR=0.9848  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  14  E=-11.035343  AR=0.9868  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  15  E=-11.081406  AR=0.9891  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  16  E=-11.127761  AR=0.9915  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  17  E=-11.168658  AR=0.9935  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  18  E=-11.200204  AR=0.9951  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  19  E=-11.220634  AR=0.9962  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.01  step  20  E=-11.230307  AR=0.9966  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] 2/3 증류 c=0.05: |θ| <= 0.3 제거 → 남은 각도 58/114
+[TC3 grid3x3_inst3_seed120493 pado_safe] 3/3 exact 미세조정 c=0.05: 20 step (step당 환산 회로 117개)
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   0  E=-9.924644  AR=0.9305  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   1  E=-10.268822  AR=0.9479  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   2  E=-10.537805  AR=0.9616  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   3  E=-10.747367  AR=0.9722  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   4  E=-10.908337  AR=0.9803  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   5  E=-11.022896  AR=0.9861  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   6  E=-11.094035  AR=0.9897  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   7  E=-11.130192  AR=0.9916  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   8  E=-11.143888  AR=0.9923  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step   9  E=-11.147214  AR=0.9924  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  10  E=-11.148032  AR=0.9925  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  11  E=-11.149922  AR=0.9926  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  12  E=-11.154620  AR=0.9928  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  13  E=-11.163741  AR=0.9933  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  14  E=-11.178122  AR=0.9940  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  15  E=-11.196551  AR=0.9949  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  16  E=-11.216181  AR=0.9959  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  17  E=-11.234167  AR=0.9968  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  18  E=-11.249002  AR=0.9976  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  19  E=-11.260669  AR=0.9982  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.05  step  20  E=-11.269645  AR=0.9986  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] 2/3 증류 c=0.1: |θ| <= 0.3 제거 → 남은 각도 56/114
+[TC3 grid3x3_inst3_seed120493 pado_safe] 3/3 exact 미세조정 c=0.1: 20 step (step당 환산 회로 113개)
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   0  E=-10.326612  AR=0.9509  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   1  E=-10.564436  AR=0.9629  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   2  E=-10.743931  AR=0.9720  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   3  E=-10.882868  AR=0.9790  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   4  E=-10.991694  AR=0.9846  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   5  E=-11.074379  AR=0.9887  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   6  E=-11.131691  AR=0.9917  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   7  E=-11.165811  AR=0.9934  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   8  E=-11.181259  AR=0.9942  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step   9  E=-11.184116  AR=0.9943  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  10  E=-11.180570  AR=0.9941  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  11  E=-11.175689  AR=0.9939  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  12  E=-11.172873  AR=0.9937  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  13  E=-11.173916  AR=0.9938  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  14  E=-11.179312  AR=0.9941  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  15  E=-11.188565  AR=0.9945  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  16  E=-11.200576  AR=0.9951  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  17  E=-11.214070  AR=0.9958  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  18  E=-11.227897  AR=0.9965  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  19  E=-11.241094  AR=0.9972  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.1  step  20  E=-11.252819  AR=0.9978  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] 2/3 증류 c=0.2: |θ| <= 0.3 제거 → 남은 각도 44/114
+[TC3 grid3x3_inst3_seed120493 pado_safe] 3/3 exact 미세조정 c=0.2: 20 step (step당 환산 회로 89개)
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   0  E=-10.842369  AR=0.9770  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   1  E=-10.871533  AR=0.9785  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   2  E=-10.904034  AR=0.9801  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   3  E=-10.914491  AR=0.9806  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   4  E=-10.914911  AR=0.9807  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   5  E=-10.917047  AR=0.9808  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   6  E=-10.919528  AR=0.9809  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   7  E=-10.919166  AR=0.9809  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   8  E=-10.916424  AR=0.9807  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step   9  E=-10.914457  AR=0.9806  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  10  E=-10.914640  AR=0.9807  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  11  E=-10.915949  AR=0.9807  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  12  E=-10.917175  AR=0.9808  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  13  E=-10.918227  AR=0.9808  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  14  E=-10.919872  AR=0.9809  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  15  E=-10.922491  AR=0.9811  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  16  E=-10.925371  AR=0.9812  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  17  E=-10.927265  AR=0.9813  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  18  E=-10.927464  AR=0.9813  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  19  E=-10.926390  AR=0.9812  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.2  step  20  E=-10.925131  AR=0.9812  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] 2/3 증류 c=0.4: |θ| <= 0.3 제거 → 남은 각도 48/114
+[TC3 grid3x3_inst3_seed120493 pado_safe] 3/3 exact 미세조정 c=0.4: 20 step (step당 환산 회로 97개)
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   0  E=-11.054736  AR=0.9878  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   1  E=-11.167292  AR=0.9935  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   2  E=-11.205966  AR=0.9954  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   3  E=-11.255627  AR=0.9979  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   4  E=-11.283845  AR=0.9994  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   5  E=-11.281733  AR=0.9993  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   6  E=-11.271698  AR=0.9987  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   7  E=-11.268529  AR=0.9986  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   8  E=-11.268056  AR=0.9986  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step   9  E=-11.264424  AR=0.9984  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  10  E=-11.259872  AR=0.9981  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  11  E=-11.260739  AR=0.9982  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  12  E=-11.267685  AR=0.9985  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  13  E=-11.275627  AR=0.9989  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  14  E=-11.280447  AR=0.9992  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  15  E=-11.282887  AR=0.9993  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  16  E=-11.286046  AR=0.9995  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  17  E=-11.290383  AR=0.9997  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  18  E=-11.293287  AR=0.9998  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  19  E=-11.292758  AR=0.9998  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] c=0.4  step  20  E=-11.289993  AR=0.9997  0.00s
+[TC3 grid3x3_inst3_seed120493 pado_safe] 끝: AR(0) → AR(20) = 0.900→0.997, 0.930→0.999, 0.951→0.998, 0.977→0.981, 0.988→1.000  저장 results_on_P300C/TC3/grid3x3_inst3_seed120493/pado_safe
+nanobind: leaked 1 instances!
+ - leaked instance 0x7b22bba5cc48 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 13 types!
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "UnaryOpType"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseOptimizedProgramFactory"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulParams"
+ - leaked type "ttnn._ttnn.tensor.CoreRangeSet"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulDeviceOperation"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulProgramConfig"
+ - ... skipped remainder
+nanobind: leaked 202 functions!
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function "to_list"
+ - leaked function "__repr__"
+ - leaked function "matmul_select_program_factory"
+ - leaked function ""
+ - leaked function "get_tile"
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:12:38.433 | info     |    BuildKernels | JIT cache stats: 33/33 hits (100.0%) [33 cached, 13 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:12:38.433 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:12:38.449 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:12:38.449 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:12:38.933 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:12:38.933 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:12:38.933 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+      (5초)
+
+===== [TC3] grid3x3_inst3_seed120493 / standard_long  (상한 2000 step)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst3_seed120493 standard_long] 시작: 초기값마다 목표 AR = PADO 최종 AR, 상한 2000 step
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step    0  AR=0.4279  목표=0.9966  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step   50  AR=0.9020  목표=0.9966  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step  100  AR=0.9808  목표=0.9966  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step  150  AR=0.9814  목표=0.9966  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step  200  AR=0.9815  목표=0.9966  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step  250  AR=0.9820  목표=0.9966  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01  step  300  AR=0.9863  목표=0.9966  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.01: step 338에서 목표 도달  (1.8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step    0  AR=0.4342  목표=0.9986  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step   50  AR=0.9198  목표=0.9986  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  100  AR=0.9810  목표=0.9986  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  150  AR=0.9814  목표=0.9986  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  200  AR=0.9816  목표=0.9986  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  250  AR=0.9820  목표=0.9986  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  300  AR=0.9855  목표=0.9986  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05  step  350  AR=0.9985  목표=0.9986  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.05: step 352에서 목표 도달  (2.0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step    0  AR=0.4479  목표=0.9978  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step   50  AR=0.9394  목표=0.9978  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  100  AR=0.9810  목표=0.9978  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  150  AR=0.9813  목표=0.9978  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  200  AR=0.9814  목표=0.9978  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  250  AR=0.9814  목표=0.9978  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  300  AR=0.9816  목표=0.9978  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  350  AR=0.9820  목표=0.9978  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1  step  400  AR=0.9878  목표=0.9978  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.1: step 429에서 목표 도달  (2.3s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.2  step    0  AR=0.4627  목표=0.9812  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.2  step   50  AR=0.9752  목표=0.9812  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.2: step 86에서 목표 도달  (0.4s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step    0  AR=0.4474  목표=0.9997  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step   50  AR=0.9720  목표=0.9997  (0s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  100  AR=0.9811  목표=0.9997  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  150  AR=0.9813  목표=0.9997  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  200  AR=0.9813  목표=0.9997  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  250  AR=0.9813  목표=0.9997  (1s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  300  AR=0.9813  목표=0.9997  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  350  AR=0.9813  목표=0.9997  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  400  AR=0.9813  목표=0.9997  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  450  AR=0.9813  목표=0.9997  (2s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  500  AR=0.9813  목표=0.9997  (3s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  550  AR=0.9813  목표=0.9997  (3s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  600  AR=0.9813  목표=0.9997  (3s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  650  AR=0.9813  목표=0.9997  (4s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  700  AR=0.9813  목표=0.9997  (4s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  750  AR=0.9813  목표=0.9997  (4s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  800  AR=0.9813  목표=0.9997  (4s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  850  AR=0.9813  목표=0.9997  (5s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  900  AR=0.9813  목표=0.9997  (5s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step  950  AR=0.9813  목표=0.9997  (5s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1000  AR=0.9813  목표=0.9997  (5s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1050  AR=0.9813  목표=0.9997  (6s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1100  AR=0.9813  목표=0.9997  (6s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1150  AR=0.9813  목표=0.9997  (6s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1200  AR=0.9813  목표=0.9997  (7s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1250  AR=0.9813  목표=0.9997  (7s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1300  AR=0.9813  목표=0.9997  (7s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1350  AR=0.9813  목표=0.9997  (7s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1400  AR=0.9813  목표=0.9997  (8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1450  AR=0.9813  목표=0.9997  (8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1500  AR=0.9813  목표=0.9997  (8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1550  AR=0.9813  목표=0.9997  (8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1600  AR=0.9813  목표=0.9997  (9s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1650  AR=0.9813  목표=0.9997  (9s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1700  AR=0.9813  목표=0.9997  (9s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1750  AR=0.9813  목표=0.9997  (9s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1800  AR=0.9813  목표=0.9997  (10s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1850  AR=0.9813  목표=0.9997  (10s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1900  AR=0.9813  목표=0.9997  (10s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 1950  AR=0.9813  목표=0.9997  (10s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4  step 2000  AR=0.9813  목표=0.9997  (11s)
+[TC3 grid3x3_inst3_seed120493 standard_long] c=0.4: 2000 step 안에 미도달  (10.8s)
+[TC3 grid3x3_inst3_seed120493 standard_long] 끝: 도달 4/5  저장 results_on_P300C/TC3/grid3x3_inst3_seed120493/standard_long
+      (19초)
+
+===== [TC3] grid3x3_inst4_seed120494 / standard
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst4_seed120494 standard] 시작: 초기값 5종 × exact 20 step (lightning.qubit, adjoint 미분)
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   0  E=-0.001998  AR=0.4962  0.01s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   1  E=-0.047557  AR=0.4990  0.01s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   2  E=-0.147039  AR=0.5052  0.01s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   3  E=-0.296654  AR=0.5144  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   4  E=-0.495734  AR=0.5266  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   5  E=-0.743475  AR=0.5419  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   6  E=-1.030806  AR=0.5596  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   7  E=-1.348629  AR=0.5792  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   8  E=-1.691927  AR=0.6004  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step   9  E=-2.058065  AR=0.6229  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  10  E=-2.442401  AR=0.6466  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  11  E=-2.838517  AR=0.6710  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  12  E=-3.239280  AR=0.6957  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  13  E=-3.637690  AR=0.7203  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  14  E=-4.027887  AR=0.7443  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  15  E=-4.405163  AR=0.7676  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  16  E=-4.765029  AR=0.7898  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  17  E=-5.101871  AR=0.8105  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  18  E=-5.408669  AR=0.8294  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  19  E=-5.678456  AR=0.8460  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.01  step  20  E=-5.906989  AR=0.8601  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   0  E=-0.043381  AR=0.4988  0.01s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   1  E=-0.237050  AR=0.5107  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   2  E=-0.434931  AR=0.5229  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   3  E=-0.651498  AR=0.5362  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   4  E=-0.892605  AR=0.5511  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   5  E=-1.160434  AR=0.5676  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   6  E=-1.455463  AR=0.5858  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   7  E=-1.773725  AR=0.6054  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   8  E=-2.110307  AR=0.6261  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step   9  E=-2.459231  AR=0.6477  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  10  E=-2.813096  AR=0.6695  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  11  E=-3.165422  AR=0.6912  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  12  E=-3.512268  AR=0.7125  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  13  E=-3.850805  AR=0.7334  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  14  E=-4.177922  AR=0.7536  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  15  E=-4.490673  AR=0.7728  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  16  E=-4.786975  AR=0.7911  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  17  E=-5.065532  AR=0.8083  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  18  E=-5.324804  AR=0.8243  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  19  E=-5.562687  AR=0.8389  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.05  step  20  E=-5.777218  AR=0.8521  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   0  E=-0.113593  AR=0.5031  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   1  E=-0.428202  AR=0.5225  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   2  E=-0.736658  AR=0.5415  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   3  E=-1.035629  AR=0.5599  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   4  E=-1.331187  AR=0.5781  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   5  E=-1.625262  AR=0.5963  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   6  E=-1.913588  AR=0.6140  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   7  E=-2.192850  AR=0.6312  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   8  E=-2.465028  AR=0.6480  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step   9  E=-2.733344  AR=0.6645  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  10  E=-2.998460  AR=0.6809  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  11  E=-3.258461  AR=0.6969  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  12  E=-3.510286  AR=0.7124  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  13  E=-3.751685  AR=0.7273  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  14  E=-3.982618  AR=0.7415  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  15  E=-4.205172  AR=0.7553  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  16  E=-4.421908  AR=0.7686  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  17  E=-4.633880  AR=0.7817  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  18  E=-4.840409  AR=0.7944  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  19  E=-5.040418  AR=0.8067  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.1  step  20  E=-5.233139  AR=0.8186  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   0  E=-0.090910  AR=0.5017  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   1  E=-0.417756  AR=0.5218  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   2  E=-0.752927  AR=0.5425  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   3  E=-1.111559  AR=0.5646  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   4  E=-1.487670  AR=0.5878  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   5  E=-1.869520  AR=0.6113  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   6  E=-2.244701  AR=0.6344  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   7  E=-2.602052  AR=0.6565  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   8  E=-2.932726  AR=0.6768  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step   9  E=-3.232584  AR=0.6953  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  10  E=-3.505427  AR=0.7121  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  11  E=-3.761786  AR=0.7279  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  12  E=-4.013719  AR=0.7435  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  13  E=-4.270572  AR=0.7593  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  14  E=-4.536666  AR=0.7757  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  15  E=-4.811069  AR=0.7926  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  16  E=-5.088548  AR=0.8097  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  17  E=-5.361033  AR=0.8265  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  18  E=-5.619415  AR=0.8424  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  19  E=-5.855346  AR=0.8569  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.2  step  20  E=-6.062696  AR=0.8697  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   0  E=-0.032962  AR=0.4981  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   1  E=-0.457135  AR=0.5243  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   2  E=-0.880253  AR=0.5503  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   3  E=-1.296981  AR=0.5760  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   4  E=-1.705110  AR=0.6012  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   5  E=-2.102934  AR=0.6257  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   6  E=-2.490815  AR=0.6496  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   7  E=-2.869513  AR=0.6729  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   8  E=-3.239249  AR=0.6957  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step   9  E=-3.599089  AR=0.7179  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  10  E=-3.945045  AR=0.7392  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  11  E=-4.270837  AR=0.7593  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  12  E=-4.570385  AR=0.7778  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  13  E=-4.840108  AR=0.7944  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  14  E=-5.079490  AR=0.8091  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  15  E=-5.290313  AR=0.8221  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  16  E=-5.475741  AR=0.8336  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  17  E=-5.639244  AR=0.8436  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  18  E=-5.783797  AR=0.8525  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  19  E=-5.911603  AR=0.8604  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] c=0.4  step  20  E=-6.024318  AR=0.8674  0.00s
+[TC3 grid3x3_inst4_seed120494 standard] 끝: AR(0) → AR(20) = 0.496→0.860, 0.499→0.852, 0.503→0.819, 0.502→0.870, 0.498→0.867  저장 results_on_P300C/TC3/grid3x3_inst4_seed120494/standard
+      (3초)
+
+===== [TC3] grid3x3_inst4_seed120494 / pado_safe
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst4_seed120494 pado_safe] 1/3 LWPP 사전학습: max_weight 3, 100 step, float32 (NPU, 양자 자원 0)
+2026-10-30 11:13:02.714 | DEBUG    | ttnn:<module>:78 - Initial ttnn.CONFIG:
+Config{cache_path=~/.cache/ttnn,model_cache_path=~/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_graph_python_stack_traces=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-10-30 11:13:02.751 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:228)
+2026-10-30 11:13:02.751 | info     |             UMD | Cluster constructor started. (cluster.cpp:378)
+2026-10-30 11:13:02.751 | info     |             UMD | Creating TopologyDiscovery for architecture: blackhole (topology_discovery.cpp:95)
+2026-10-30 11:13:02.751 | info     |             UMD | Starting topology discovery. (topology_discovery.cpp:114)
+2026-10-30 11:13:02.764 | info     |             UMD | Established firmware bundle version: 19.16.0 (topology_discovery.cpp:574)
+2026-10-30 11:13:02.765 | info     |             UMD | Completed topology discovery. (topology_discovery.cpp:118)
+2026-10-30 11:13:02.774 | info     |             UMD | Opening local chip ids/PCIe ids: {0, 1, 2, 3}/[0, 1, 2, 3] and remote chip ids {} (cluster.cpp:168)
+2026-10-30 11:13:02.774 | info     |             UMD | IOMMU: disabled (cluster.cpp:142)
+2026-10-30 11:13:02.774 | info     |             UMD | KMD version: 2.7.0 (cluster.cpp:145)
+2026-10-30 11:13:02.774 | info     |             UMD | Cluster constructor completed. (cluster.cpp:574)
+2026-10-30 11:13:02.775 | info     |             UMD | Starting devices in cluster (cluster.cpp:1092)
+2026-10-30 11:13:03.024 | info     |             UMD | Starting devices in cluster completed. (cluster.cpp:1100)
+2026-10-30 11:13:03.121 | info     |     Distributed | Using auto discovery to generate mesh graph. (metal_env.cpp:437)
+2026-10-30 11:13:03.121 | info     |     Distributed | Constructing control plane using auto-discovery (no mesh graph descriptor). (metal_env.cpp:499)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=1 (bus_id=0x2) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=0 (bus_id=0x1) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=2 (bus_id=0x3) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | warning  |          Always | Unknown motherboard 'B850M-C' for chip_id=3 (bus_id=0x4) — falling back to bus_id as tray_id. Add this motherboard and its bus IDs to mobo_to_bus_ids in physical_system_discovery.cpp. (physical_system_discovery.cpp:112)
+2026-10-30 11:13:03.121 | info     |          Fabric | Logical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2404)
+2026-10-30 11:13:03.121 | info     |          Fabric | Physical multi-mesh adjacency: intermesh degree histogram {0:1}; intra-mesh degree histograms mesh0 {2:4} (topology_mapper_utils.cpp:2412)
+2026-10-30 11:13:03.130 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:13:03.130 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:13:03.130 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:13:03.131 | info     |    BuildKernels | Using pre-compiled firmware from: ~/tt-metal/tt_metal/pre-compiled/15570547042316605318/ (build_env_manager.cpp:347)
+2026-10-30 11:13:03.165 | warning  |           Metal | Opening subset of mmio devices slows down UMD read/write to remote chips. If opening more devices, consider using CreateDevices API. (device_manager.cpp:261)
+[TC3 grid3x3_inst4_seed120494 pado_safe] compile 1.2s  terms=120  host peak RSS=0.58 GB  NPU DRAM=0.000 GB
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step    0  E_lwpp=[-0.002, -0.0432, -0.1072, -0.0202, -0.0087]
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step   20  E_lwpp=[-5.9823, -5.8264, -5.2662, -6.5213, -6.592]
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step   40  E_lwpp=[-7.1917, -7.1842, -7.2448, -7.5355, -7.4587]
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step   60  E_lwpp=[-7.652, -7.6596, -7.7418, -7.7843, -7.731]
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step   80  E_lwpp=[-7.8989, -7.9897, -7.9399, -7.945, -8.2015]
+[TC3 grid3x3_inst4_seed120494 pado_safe] lwpp step   99  E_lwpp=[-8.6273, -8.6435, -8.12, -8.0896, -8.5715]
+[TC3 grid3x3_inst4_seed120494 pado_safe] 사전학습 끝 0.6s  host peak RSS=0.69 GB  NPU DRAM=0.034 GB
+[TC3 grid3x3_inst4_seed120494 pado_safe] 2/3 증류 c=0.01: |θ| <= 0.3 제거 → 남은 각도 59/114
+[TC3 grid3x3_inst4_seed120494 pado_safe] 3/3 exact 미세조정 c=0.01: 20 step (step당 환산 회로 119개)
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   0  E=-7.493856  AR=0.9579  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   1  E=-7.664377  AR=0.9684  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   2  E=-7.781131  AR=0.9756  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   3  E=-7.859345  AR=0.9805  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   4  E=-7.911758  AR=0.9837  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   5  E=-7.944309  AR=0.9857  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   6  E=-7.961672  AR=0.9868  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   7  E=-7.969087  AR=0.9872  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   8  E=-7.971738  AR=0.9874  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step   9  E=-7.974373  AR=0.9875  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  10  E=-7.980513  AR=0.9879  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  11  E=-7.991624  AR=0.9886  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  12  E=-8.006967  AR=0.9896  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  13  E=-8.024421  AR=0.9906  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  14  E=-8.041771  AR=0.9917  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  15  E=-8.057638  AR=0.9927  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  16  E=-8.071602  AR=0.9935  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  17  E=-8.083637  AR=0.9943  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  18  E=-8.093636  AR=0.9949  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  19  E=-8.101447  AR=0.9954  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.01  step  20  E=-8.107130  AR=0.9957  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] 2/3 증류 c=0.05: |θ| <= 0.3 제거 → 남은 각도 56/114
+[TC3 grid3x3_inst4_seed120494 pado_safe] 3/3 exact 미세조정 c=0.05: 20 step (step당 환산 회로 113개)
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   0  E=-7.230392  AR=0.9417  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   1  E=-7.429507  AR=0.9540  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   2  E=-7.578000  AR=0.9631  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   3  E=-7.680682  AR=0.9694  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   4  E=-7.751078  AR=0.9738  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   5  E=-7.801211  AR=0.9769  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   6  E=-7.838119  AR=0.9791  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   7  E=-7.865661  AR=0.9808  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   8  E=-7.886221  AR=0.9821  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step   9  E=-7.901759  AR=0.9831  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  10  E=-7.914231  AR=0.9838  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  11  E=-7.925665  AR=0.9845  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  12  E=-7.937937  AR=0.9853  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  13  E=-7.952262  AR=0.9862  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  14  E=-7.968799  AR=0.9872  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  15  E=-7.986759  AR=0.9883  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  16  E=-8.004886  AR=0.9894  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  17  E=-8.021961  AR=0.9905  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  18  E=-8.037148  AR=0.9914  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  19  E=-8.050107  AR=0.9922  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.05  step  20  E=-8.060922  AR=0.9929  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] 2/3 증류 c=0.1: |θ| <= 0.3 제거 → 남은 각도 53/114
+[TC3 grid3x3_inst4_seed120494 pado_safe] 3/3 exact 미세조정 c=0.1: 20 step (step당 환산 회로 107개)
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   0  E=-7.035804  AR=0.9297  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   1  E=-7.189026  AR=0.9391  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   2  E=-7.312796  AR=0.9468  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   3  E=-7.404756  AR=0.9524  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   4  E=-7.468793  AR=0.9564  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   5  E=-7.512337  AR=0.9591  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   6  E=-7.542912  AR=0.9610  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   7  E=-7.566228  AR=0.9624  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   8  E=-7.585388  AR=0.9636  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step   9  E=-7.601742  AR=0.9646  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  10  E=-7.615588  AR=0.9654  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  11  E=-7.626517  AR=0.9661  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  12  E=-7.633990  AR=0.9666  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  13  E=-7.638010  AR=0.9668  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  14  E=-7.639386  AR=0.9669  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  15  E=-7.639403  AR=0.9669  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  16  E=-7.639318  AR=0.9669  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  17  E=-7.640062  AR=0.9669  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  18  E=-7.642160  AR=0.9671  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  19  E=-7.645703  AR=0.9673  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.1  step  20  E=-7.650355  AR=0.9676  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] 2/3 증류 c=0.2: |θ| <= 0.3 제거 → 남은 각도 58/114
+[TC3 grid3x3_inst4_seed120494 pado_safe] 3/3 exact 미세조정 c=0.2: 20 step (step당 환산 회로 117개)
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   0  E=-7.441347  AR=0.9547  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   1  E=-7.542690  AR=0.9609  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   2  E=-7.606573  AR=0.9649  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   3  E=-7.645767  AR=0.9673  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   4  E=-7.673314  AR=0.9690  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   5  E=-7.696742  AR=0.9704  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   6  E=-7.715728  AR=0.9716  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   7  E=-7.728503  AR=0.9724  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   8  E=-7.734958  AR=0.9728  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step   9  E=-7.737140  AR=0.9729  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  10  E=-7.738183  AR=0.9730  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  11  E=-7.740662  AR=0.9731  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  12  E=-7.745571  AR=0.9734  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  13  E=-7.752433  AR=0.9739  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  14  E=-7.760098  AR=0.9743  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  15  E=-7.767603  AR=0.9748  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  16  E=-7.774501  AR=0.9752  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  17  E=-7.780623  AR=0.9756  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  18  E=-7.785797  AR=0.9759  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  19  E=-7.789864  AR=0.9762  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.2  step  20  E=-7.792846  AR=0.9764  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] 2/3 증류 c=0.4: |θ| <= 0.3 제거 → 남은 각도 54/114
+[TC3 grid3x3_inst4_seed120494 pado_safe] 3/3 exact 미세조정 c=0.4: 20 step (step당 환산 회로 109개)
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   0  E=-7.386777  AR=0.9513  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   1  E=-7.474627  AR=0.9567  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   2  E=-7.524721  AR=0.9598  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   3  E=-7.550198  AR=0.9614  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   4  E=-7.558847  AR=0.9619  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   5  E=-7.563274  AR=0.9622  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   6  E=-7.569604  AR=0.9626  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   7  E=-7.578607  AR=0.9632  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   8  E=-7.590024  AR=0.9639  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step   9  E=-7.603316  AR=0.9647  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  10  E=-7.616766  AR=0.9655  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  11  E=-7.628588  AR=0.9662  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  12  E=-7.638134  AR=0.9668  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  13  E=-7.645601  AR=0.9673  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  14  E=-7.651473  AR=0.9676  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  15  E=-7.656397  AR=0.9679  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  16  E=-7.661233  AR=0.9682  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  17  E=-7.666752  AR=0.9686  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  18  E=-7.673158  AR=0.9690  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  19  E=-7.680116  AR=0.9694  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] c=0.4  step  20  E=-7.687097  AR=0.9698  0.00s
+[TC3 grid3x3_inst4_seed120494 pado_safe] 끝: AR(0) → AR(20) = 0.958→0.996, 0.942→0.993, 0.930→0.968, 0.955→0.976, 0.951→0.970  저장 results_on_P300C/TC3/grid3x3_inst4_seed120494/pado_safe
+nanobind: leaked 1 instances!
+ - leaked instance 0x75a62ee94bb8 of type "ttnn._ttnn.tensor.CoreRangeSet"
+nanobind: leaked 13 types!
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCast1DProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulInputs"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseMultiCastBatchedDRAMShardedProgramConfig"
+ - leaked type "UnaryOpType"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseOptimizedProgramFactory"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulParams"
+ - leaked type "ttnn._ttnn.tensor.CoreRangeSet"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulMultiCoreReuseProgramConfig"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulDeviceOperation"
+ - leaked type "ttnn._ttnn.operations.matmul.MatmulProgramConfig"
+ - ... skipped remainder
+nanobind: leaked 202 functions!
+ - leaked function "__init__"
+ - leaked function "is_sharded"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "__init__"
+ - leaked function ""
+ - leaked function "get_layout"
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - ... skipped remainder
+nanobind: this is likely caused by a reference counting issue in the binding code.
+See https://nanobind.readthedocs.io/en/latest/refleaks.html2026-10-30 11:13:05.288 | info     |    BuildKernels | JIT cache stats: 33/33 hits (100.0%) [33 cached, 13 build-once dedup, 0 merged artifacts, 0 merged genfiles] (build_cache_telemetry.cpp:207)
+2026-10-30 11:13:05.288 | info     |    BuildKernels | JIT telemetry: 3 registered TelemetryTokens (build_cache_telemetry.cpp:230)
+2026-10-30 11:13:05.303 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:513)
+2026-10-30 11:13:05.303 | info     |             UMD | Closing devices in cluster (cluster.cpp:1105)
+2026-10-30 11:13:05.737 | info     |             UMD | Closing devices in cluster completed. (cluster.cpp:1114)
+2026-10-30 11:13:05.737 | info     |             UMD | Cluster destructor started. (cluster.cpp:808)
+2026-10-30 11:13:05.737 | info     |             UMD | Cluster destructor completed. (cluster.cpp:811)
+      (5초)
+
+===== [TC3] grid3x3_inst4_seed120494 / standard_long  (상한 2000 step)
+~/miniconda3/envs/pado_tt/lib/python3.12/site-packages/pennylane/__init__.py:212: PennyLaneDeprecationWarning: PennyLane v0.44 has dropped maintainence support for NumPy < 2.0.0. You have version 1.26.4 installed. Future versions of PennyLane will not work with NumPy<2.0. Please consider upgrading NumPy using `python -m pip install numpy --upgrade`. 
+  warnings.warn(
+[TC3 grid3x3_inst4_seed120494 standard_long] 시작: 초기값마다 목표 AR = PADO 최종 AR, 상한 2000 step
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.01  step    0  AR=0.4962  목표=0.9957  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.01  step   50  AR=0.9612  목표=0.9957  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.01  step  100  AR=0.9760  목표=0.9957  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.01: step 139에서 목표 도달  (0.8s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.05  step    0  AR=0.4988  목표=0.9929  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.05  step   50  AR=0.9622  목표=0.9929  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.05  step  100  AR=0.9751  목표=0.9929  (1s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.05: step 131에서 목표 도달  (0.7s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.1  step    0  AR=0.5031  목표=0.9676  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.1  step   50  AR=0.9616  목표=0.9676  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.1: step 60에서 목표 도달  (0.3s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.2  step    0  AR=0.5017  목표=0.9764  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.2  step   50  AR=0.9640  목표=0.9764  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.2  step  100  AR=0.9761  목표=0.9764  (1s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.2: step 104에서 목표 도달  (0.6s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.4  step    0  AR=0.4981  목표=0.9698  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.4  step   50  AR=0.9537  목표=0.9698  (0s)
+[TC3 grid3x3_inst4_seed120494 standard_long] c=0.4: step 67에서 목표 도달  (0.3s)
+[TC3 grid3x3_inst4_seed120494 standard_long] 끝: 도달 5/5  저장 results_on_P300C/TC3/grid3x3_inst4_seed120494/standard_long
+      (5초)
+
+===== [TC3] 실행 끝 (1.5분). 다음: python ~/SAFE_with_PADO_for_TTA/metric.py --exp TC3
