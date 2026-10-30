@@ -3,3 +3,4 @@ __pycache__/
 CLAUDE.md
 results_on_*/
 !results_on_P300C/
+_workspace/
